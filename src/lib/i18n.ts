@@ -1,0 +1,296 @@
+// Lightweight i18n: NL is default, EN routes are prefixed with /en.
+// Mirrors next-intl's `localePrefix: 'as-needed'` strategy.
+
+import type { Context } from 'hono';
+import type { Locale } from './data';
+
+export type Messages = typeof NL;
+
+const NL = {
+  nav: {
+    home: 'Home',
+    reis: 'De Reis',
+    dagboek: 'Reisdagboek',
+    encyclopedie: 'Encyclopedie',
+    concerten: 'Concerten',
+    over: 'Over',
+    contact: 'Contact',
+    login: 'Inloggen',
+    menu: 'Menu',
+  },
+  home: {
+    heroTagline: 'Een culturele reis',
+    heroTitle: 'Mahler Reise',
+    heroSubtitle:
+      'In de voetsporen van Gustav Mahler — van zijn geboortehuis in Kaliště tot zijn componeerhutje aan het Toblachermeer.',
+    ctaJoin: 'Boek de reis',
+    ctaExplore: 'Ontdek de route',
+    featuresTitle: 'Vier manieren om Mahler te beleven',
+    quote: 'Een symfonie moet als de wereld zijn. Ze moet alles omvatten.',
+    quoteAttribution: 'Gustav Mahler',
+    newsletterTitle: 'Blijf op de hoogte',
+    newsletterDesc: 'Ontvang updates over de reis, nieuwe dagboekposts en concertdata.',
+    newsletterPlaceholder: 'uw@email.be',
+    newsletterCta: 'Inschrijven',
+    features: {
+      reis: { title: 'De Reis', desc: 'Tien dagen door de leefwereld van Mahler — bus, gids, premium hotels.' },
+      dagboek: { title: 'Reisdagboek', desc: "Volg de prospectiereis dag na dag, met foto's, kaart en muzikale ontmoetingen." },
+      encyclopedie: { title: 'Encyclopedie', desc: 'Zestien locaties, een eeuw geschiedenis — werken, manuscripten, bronnen.' },
+      concerten: { title: 'Concerten', desc: 'Mahler-uitvoeringen 2026 in Toblach, Bolzano en Jihlava — met Tom Devaere.' },
+    },
+  },
+  reis: {
+    title: 'De Reis 2027',
+    subtitle: 'Tien dagen, elf locaties, één componist.',
+    intro: 'Een unieke groepsreis met luxe touringcar, ervaren gids en exclusieve toegang tot Mahler-archieven en -concerten.',
+    departuresTitle: 'Vertrekdata 2027',
+    programTitle: 'Dagprogramma',
+    includedTitle: 'Wat is inbegrepen',
+    pricingTitle: 'Drie pakketten',
+    perPerson: 'per persoon',
+    signupTitle: 'Voorinschrijving',
+    faqTitle: 'Veelgestelde vragen',
+    standard: 'Standaard',
+    comfort: 'Comfort',
+    premium: 'Premium',
+    mostPopular: 'Meest gekozen',
+    choose: 'Kies dit pakket',
+  },
+  dagboek: {
+    title: 'Reisdagboek',
+    subtitle: 'Volg ons tijdens de prospectiereis 21–30 augustus 2026.',
+    readMore: 'Lees verder',
+    by: 'door',
+    backToList: 'Terug naar dagboek',
+  },
+  encyclopedie: {
+    title: 'Encyclopedie',
+    subtitle: 'Zestien locaties uit het leven van Gustav Mahler (1860–1911).',
+    timeline: 'Tijdlijn',
+    map: 'Kaart',
+    fullContent: 'Volledig',
+    comingSoon: 'Wordt uitgebreid',
+    works: 'Werken',
+    manuscripts: 'Manuscripten',
+    bibliography: 'Bibliografie',
+    previous: 'Vorige',
+    next: 'Volgende',
+    backToList: 'Terug naar encyclopedie',
+    readMore: 'Lees meer',
+  },
+  concerten: {
+    title: 'Concerten 2026',
+    subtitle: 'Mahler-uitvoeringen waarbij we aanwezig zijn — met Tom Devaere als violist.',
+    tickets: 'Tickets',
+    moreInfo: 'Meer info',
+    performers: 'Uitvoerders',
+  },
+  over: {
+    title: 'Over ons',
+    vision: 'Onze visie',
+    supporters: 'Met steun van',
+    violinistCofounder: 'Violist · Mede-oprichter',
+    projectLeadCofounder: 'Projectleider · Mede-oprichter',
+  },
+  contact: {
+    title: 'Contact',
+    subtitle: 'Vragen, suggesties of interesse om mee te reizen? Stuur ons een bericht.',
+    name: 'Naam',
+    email: 'E-mail',
+    subject: 'Onderwerp',
+    message: 'Bericht',
+    send: 'Verstuur',
+    success: 'Bedankt — we nemen spoedig contact op.',
+    directContact: 'Direct contact',
+  },
+  footer: {
+    rights: 'Alle rechten voorbehouden',
+    tagline: 'In de voetsporen van Gustav Mahler',
+    legal: 'Juridisch',
+    privacy: 'Privacy',
+    terms: 'Algemene voorwaarden',
+    cookies: 'Cookies',
+    navigation: 'Navigatie',
+  },
+  app: {
+    loginTitle: 'Inloggen',
+    loginSubtitle: 'Toegang voor het prospectie-team',
+    magicLink: 'Stuur magic link',
+    demoNote:
+      'Demo: gebruik elk e-mailadres om in te loggen. In productie wordt dit vervangen door Supabase magic link auth.',
+    backToSite: '← Terug naar de website',
+    dashboard: 'Dashboard',
+    locaties: 'Locaties',
+    contacten: 'Contacten',
+    checklist: 'Checklist',
+    audio: 'Audio',
+    instellingen: 'Instellingen',
+    welcomeBack: 'Welkom terug — overzicht van de prospectiereis 2026.',
+    nextStop: 'Volgende halte',
+    daysUntilArrival: 'dagen tot aankomst',
+    progressTitle: 'Voortgang prospectiereis',
+    progressLocations: 'Locaties bezocht',
+    progressChecklist: 'Checklist afgewerkt',
+    progressContacts: 'Contacten bevestigd',
+    recentActivity: 'Recente activiteit',
+    quickActions: 'Snelle acties',
+    newEntry: 'Nieuwe entry',
+    addContact: 'Contact toevoegen',
+    uploadAudio: 'Audio uploaden',
+    logout: 'Uitloggen',
+  },
+} as const;
+
+const EN = {
+  nav: {
+    home: 'Home',
+    reis: 'The Tour',
+    dagboek: 'Travel Journal',
+    encyclopedie: 'Encyclopedia',
+    concerten: 'Concerts',
+    over: 'About',
+    contact: 'Contact',
+    login: 'Sign in',
+    menu: 'Menu',
+  },
+  home: {
+    heroTagline: 'A cultural journey',
+    heroTitle: 'Mahler Reise',
+    heroSubtitle:
+      "In the footsteps of Gustav Mahler — from his birthplace in Kaliště to his composing hut on Lake Toblach.",
+    ctaJoin: 'Book the tour',
+    ctaExplore: 'Discover the route',
+    featuresTitle: 'Four ways to experience Mahler',
+    quote: 'A symphony must be like the world. It must embrace everything.',
+    quoteAttribution: 'Gustav Mahler',
+    newsletterTitle: 'Stay in touch',
+    newsletterDesc: 'Updates on the journey, new journal posts and concert dates.',
+    newsletterPlaceholder: 'your@email.com',
+    newsletterCta: 'Subscribe',
+    features: {
+      reis: { title: 'The Tour', desc: "Ten days through Mahler's world — coach, guide, premium hotels." },
+      dagboek: { title: 'Travel Journal', desc: 'Follow the prospection tour day by day, with photos, maps and musical encounters.' },
+      encyclopedie: { title: 'Encyclopedia', desc: 'Sixteen locations, a century of history — works, manuscripts, sources.' },
+      concerten: { title: 'Concerts', desc: 'Mahler performances in Toblach, Bolzano and Jihlava — featuring Tom Devaere.' },
+    },
+  },
+  reis: {
+    title: 'The Tour 2027',
+    subtitle: 'Ten days, eleven locations, one composer.',
+    intro: 'A unique group journey with luxury coach, expert guide and exclusive access to Mahler archives and concerts.',
+    departuresTitle: 'Departure dates 2027',
+    programTitle: 'Day-by-day programme',
+    includedTitle: "What's included",
+    pricingTitle: 'Three packages',
+    perPerson: 'per person',
+    signupTitle: 'Pre-registration',
+    faqTitle: 'Frequently asked questions',
+    standard: 'Standard',
+    comfort: 'Comfort',
+    premium: 'Premium',
+    mostPopular: 'Most popular',
+    choose: 'Choose',
+  },
+  dagboek: {
+    title: 'Travel Journal',
+    subtitle: 'Follow us during the prospection tour, 21–30 August 2026.',
+    readMore: 'Read more',
+    by: 'by',
+    backToList: 'Back to journal',
+  },
+  encyclopedie: {
+    title: 'Encyclopedia',
+    subtitle: 'Sixteen places from the life of Gustav Mahler (1860–1911).',
+    timeline: 'Timeline',
+    map: 'Map',
+    fullContent: 'Full',
+    comingSoon: 'Expanding soon',
+    works: 'Works',
+    manuscripts: 'Manuscripts',
+    bibliography: 'Bibliography',
+    previous: 'Previous',
+    next: 'Next',
+    backToList: 'Back to encyclopedia',
+    readMore: 'Read more',
+  },
+  concerten: {
+    title: 'Concerts 2026',
+    subtitle: 'Mahler performances we will attend — with Tom Devaere as violinist.',
+    tickets: 'Tickets',
+    moreInfo: 'More info',
+    performers: 'Performers',
+  },
+  over: {
+    title: 'About',
+    vision: 'Our vision',
+    supporters: 'With support from',
+    violinistCofounder: 'Violinist · Co-founder',
+    projectLeadCofounder: 'Project lead · Co-founder',
+  },
+  contact: {
+    title: 'Contact',
+    subtitle: 'Questions, suggestions or interested in joining? Send us a message.',
+    name: 'Name',
+    email: 'Email',
+    subject: 'Subject',
+    message: 'Message',
+    send: 'Send',
+    success: "Thank you — we'll be in touch shortly.",
+    directContact: 'Direct contact',
+  },
+  footer: {
+    rights: 'All rights reserved',
+    tagline: 'In the footsteps of Gustav Mahler',
+    legal: 'Legal',
+    privacy: 'Privacy',
+    terms: 'Terms',
+    cookies: 'Cookies',
+    navigation: 'Navigation',
+  },
+  app: {
+    loginTitle: 'Sign in',
+    loginSubtitle: 'Access for the prospection team',
+    magicLink: 'Send magic link',
+    demoNote: 'Demo: use any email to sign in. In production this is replaced by Supabase magic link auth.',
+    backToSite: '← Back to the website',
+    dashboard: 'Dashboard',
+    locaties: 'Locations',
+    contacten: 'Contacts',
+    checklist: 'Checklist',
+    audio: 'Audio',
+    instellingen: 'Settings',
+    welcomeBack: 'Welcome back — overview of the 2026 prospection tour.',
+    nextStop: 'Next stop',
+    daysUntilArrival: 'days until arrival',
+    progressTitle: 'Prospection tour progress',
+    progressLocations: 'Locations visited',
+    progressChecklist: 'Checklist completed',
+    progressContacts: 'Contacts confirmed',
+    recentActivity: 'Recent activity',
+    quickActions: 'Quick actions',
+    newEntry: 'New entry',
+    addContact: 'Add contact',
+    uploadAudio: 'Upload audio',
+    logout: 'Sign out',
+  },
+} as const;
+
+export const messages: Record<Locale, Messages> = { nl: NL, en: EN };
+
+/**
+ * Locale-aware path helper.
+ * Use it for every internal link so /reis stays /reis on NL but becomes /en/reis on EN.
+ */
+export function localePath(locale: Locale, path: string): string {
+  if (path === '/' || path === '') return locale === 'en' ? '/en' : '/';
+  const clean = path.startsWith('/') ? path : `/${path}`;
+  return locale === 'en' ? `/en${clean}` : clean;
+}
+
+/**
+ * Reads the active locale from the Hono context — set in src/index.tsx by the
+ * locale middleware on /en/* routes. Defaults to 'nl'.
+ */
+export function getLocale(c: Context): Locale {
+  return (c.get('locale') as Locale | undefined) ?? 'nl';
+}

@@ -1,230 +1,179 @@
 # Mahler Reise
 
-> In de voetsporen van Gustav Mahler — een culturele reis door zestien locaties uit het leven van de componist.
+> Een culturele reis in de voetsporen van Gustav Mahler — zestien locaties, drie landen, één componist.
 
-A production-ready Next.js 14 web platform for the Mahler Reise project — a guided cultural travel concept following the life of Gustav Mahler. Owners: **Dominique Dejonghe** and violinist **Tom Devaere**. Live deadline: **1 August 2026**.
+## Project Overview
+- **Naam**: Mahler Reise
+- **Eigenaars**: Dominique Dejonghe (dominique.dejonghe@iutum.be) & Tom Devaere (tom@mahler-reise.be)
+- **Lanceringsdeadline**: 1 augustus 2026
+- **Doel**: Publiekssite + privé prospectie-app voor een 10-daagse Mahler-tour (2027) met bijhorend reisdagboek (prospectie 21–30 augustus 2026), encyclopedie (16 locaties, 1860–1911), en concertagenda 2026.
 
----
+## Tech Stack
+- **Framework**: Hono 4 op Cloudflare Workers / Pages
+- **Build**: Vite 5 + `@hono/vite-cloudflare-pages`
+- **JSX**: server-side `hono/jsx` (geen React-runtime in productie)
+- **Styling**: Tailwind CSS via CDN (brand-config inline) + custom `styles.css`
+- **Icons**: Font Awesome 6 (CDN)
+- **Fonts**: Crimson Text (serif) + Playfair Display (display) via Google Fonts
+- **i18n**: lichte custom helper (NL default, `/en/*` prefix), 0 dependencies
+- **Auth (mock)**: Hono cookies + localStorage — Supabase magic-link in productie
+- **Dev/runtime**: Wrangler Pages dev server (PM2-managed)
 
-## Tech stack
+## URLs
+- **Sandbox preview**: https://3000-ismpwjkowl7e0f3tdmq66-02b9cc79.sandbox.novita.ai
+- **Productie**: nog te deployen op Cloudflare Pages
 
-- **Next.js 14** (App Router) + **TypeScript** (strict mode)
-- **Tailwind CSS** + custom shadcn-style component library
-- **next-intl** for Dutch (default at `/`) and English (at `/en/*`) with locale routing
-- **Mapbox GL JS** for interactive maps (graceful placeholder when no token)
-- **next-pwa** for offline support + manifest
-- **React Hook Form** + **Zod** for form validation
-- **Lucide React** icon library
-- **date-fns** for date formatting
+## Routes — publiek (Nederlands, default)
+| Route | Inhoud |
+|---|---|
+| `/` | Homepage met hero (lokale Mahler-portretfoto), 4 feature-kaarten, citaat, nieuwsbrief |
+| `/reis` | Bus-tour 2027 — vertrekdata, dagprogramma, inclusief, 3 prijspakketten (Standaard €2 995 / Comfort €3 295 / Premium €3 950), voorinschrijfformulier, FAQ |
+| `/dagboek` | Reisdagboek-overzicht (prospectiereis aug 2026) met cover-images van Unsplash |
+| `/dagboek/:slug` | Dagboek-detail met cover, datum-/locatie-badges en lange tekst |
+| `/encyclopedie` | 16 locaties + horizontale tijdlijn 1860–1911 |
+| `/encyclopedie/:slug` | Locatie-detail met typografische hero, chronologie, werken, manuscripten, bibliografie, prev/next-navigatie |
+| `/concerten` | Agenda 2026 (Toblach, Bolzano, Jihlava — met Tom Devaere) |
+| `/over` | Bios Tom & Dominique, visie, supporters |
+| `/contact` | Formulier (POST `/contact`) + directe e-mail-adressen |
 
-## Design system
+## Routes — Engels
+Iedere publieke route is ook bereikbaar onder `/en/...` (bv. `/en/reis`, `/en/encyclopedie/kaliste`). De NL-default heeft géén prefix (mirroring van next-intl `localePrefix: 'as-needed'`).
 
-- **Primary**: dark green `#2C5F4D`
-- **Accent**: gold `#B8860B`
-- **Body font**: Crimson Text (serif), via `next/font/google`
-- **Heading font**: Playfair Display, via `next/font/google`
-- Generous whitespace, elegant cultural-travel aesthetic
-- Mobile-first, fully responsive
-- Subtle fade-in animations on scroll (Intersection Observer)
+## Routes — privé `/app/*`
+Auth-gate: alle `/app/*` paden behalve `/app/login` redirecten naar `/app/login` zonder cookie `mr_session`.
 
----
+| Route | Inhoud |
+|---|---|
+| `/app/login` | Mock magic-link form (elk geldig e-mail werkt) |
+| `/app/dashboard` | KPIs, voortgang, volgende halte, recente activiteit, snelle acties |
+| `/app/locaties` | 11 prospectie-haltes (21–30 aug 2026) als kaarten |
+| `/app/locaties/:id` | Halte-detail |
+| `/app/contacten` | Tabel met archivarissen, theaters, musea + status |
+| `/app/checklist` | Checklist per categorie (admin / travel / archive / media / logistics) met progress bars |
+| `/app/audio` | Audio-opnames (interviews, ambient, lezingen) — placeholders |
+| `/app/instellingen` | Profiel, notificaties, offline cache, JSON-export, uitlogknop |
 
-## Getting started
+## API endpoints
+| Methode | Pad | Functie |
+|---|---|---|
+| `POST` | `/api/auth/login` | Zet `mr_session` cookie + redirect naar dashboard |
+| `POST` | `/api/auth/logout` | Wist cookie + redirect naar login |
+| `POST` | `/api/newsletter` | Mock newsletter-signup |
+| `POST` | `/api/signup` | Mock tour-voorinschrijving |
+| `POST` | `/contact` (& `/en/contact`) | Mock contact-formulier (server-side) |
+| `GET`  | `/app/api/export` | JSON-export (auth required) |
+
+## Data Architecture
+- **Locatie**: `src/data/*.ts` — 6 in-memory bestanden, edge-runtime safe
+- **Modellen** (`src/types/index.ts`): `ProspectionStop`, `EncyclopediaLocation`, `JournalEntry`, `Concert`, `PricingTier`, `DayProgram`, `ChecklistItem`, `Contact`, `AudioRecording`, `PrivateJournalEntry`, `DashboardStats`, `ActivityEvent`
+- **Toegangslaag**: `src/lib/data.ts` exposeert pure getters (`getStops`, `getEncyclopediaBySlug`, `getDashboardStats`, …) — 1:1 vervangbaar door Supabase REST calls in prompt 2
+- **i18n-strings**: `src/lib/i18n.ts` (NL + EN als typed constants)
+
+### Inhoud volume (mock)
+- 11 prospectie-haltes (21–30 aug 2026)
+- 16 encyclopedie-locaties (5 met volledige inhoud, 11 stubs met "Wordt uitgebreid")
+- 5 dagboek-entries
+- 4 concerten 2026
+- 10 dag-programma's (tour 2027)
+- 3 prijspakketten + 5 FAQ's
+- ~30 contacten, ~20 checklist-items, ~6 audio-opnames
+
+## Project Structure
+```
+webapp/
+├── src/
+│   ├── index.tsx                # Hono entry: routes, locale, mock-auth, static
+│   ├── components/
+│   │   ├── layout.tsx           # Layout (publiek) + AppLayout (privé) + Header + Footer
+│   │   └── ui.tsx               # Badge, Button, Card, Section, ProgressBar, TypographicHero
+│   ├── routes/
+│   │   ├── home.tsx             # Homepage
+│   │   ├── public.tsx           # /reis /dagboek /encyclopedie /concerten /over /contact
+│   │   └── app.tsx              # /app/* (login, dashboard, …)
+│   ├── lib/
+│   │   ├── data.ts              # Data-access layer (pure functions)
+│   │   └── i18n.ts              # NL + EN messages, localePath()
+│   ├── data/                    # In-memory data: stops, encyclopedia, journal, concerts, tour, private
+│   └── types/index.ts
+├── public/
+│   ├── static/                  # Served at /static/*
+│   │   ├── styles.css
+│   │   ├── app.js               # Mobile menu + toasts
+│   │   ├── auth.js              # Login/logout helpers
+│   │   ├── images/mahler-portrait.jpg
+│   │   ├── icons/
+│   │   ├── manifest.json
+│   │   └── favicon{,-32}.{ico,png}
+│   ├── images/  icons/  manifest.json  favicon.{ico,png}    # legacy locations
+├── ecosystem.config.cjs         # PM2 config (wrangler pages dev)
+├── vite.config.ts               # Vite + Hono Cloudflare Pages plugin
+├── wrangler.jsonc               # Cloudflare Pages config
+├── tsconfig.json
+└── package.json
+```
+
+## User Guide
+
+### Publieke site
+1. Open de homepage — Mahler-portret, hero-CTA, vier feature-tegels.
+2. Klik op **De Reis** voor het programma + voorinschrijven, **Encyclopedie** voor de tijdlijn, **Reisdagboek** voor de blog.
+3. Taalwisselaar (NL ⇄ EN) staat rechtsboven; route-pad blijft behouden.
+4. Op mobiel: hamburgermenu rechtsboven.
+
+### Privé app (prospectie-team)
+1. Ga naar `/app/login`.
+2. Geef elk geldig e-mailadres in (demo accepteert alles) → magic link wordt "verstuurd" → automatische redirect naar dashboard.
+3. Bekijk KPI's, locatieslijst, contacten, checklist, audio-opnames, instellingen.
+4. Uitloggen via de zijbalk-link of via Instellingen → Uitloggen.
+
+## Development
 
 ```bash
-# 1. Install dependencies
-npm install
+# Installeer
+cd /home/user/webapp && npm install
 
-# 2. Copy environment variables
-cp .env.local.example .env.local
-# Edit .env.local and add your Mapbox token from https://account.mapbox.com/access-tokens
-# (without it, the maps render an elegant placeholder fallback)
+# Build
+npm run build       # Vite bouwt dist/_worker.js (~170 KB) in <1s
 
-# 3. Run the dev server
-npm run dev
-# → http://localhost:3000  (Dutch homepage)
-# → http://localhost:3000/en  (English homepage)
-# → http://localhost:3000/app/login  (private team app)
+# Lokaal draaien (PM2)
+pm2 start ecosystem.config.cjs
+curl http://localhost:3000
+
+# Logs
+pm2 logs mahler-reise --nostream
 ```
-
-For production builds:
-
-```bash
-npm run build
-npm start
-```
-
----
-
-## Project structure
-
-```
-src/
-├── app/
-│   ├── [locale]/           # Public, internationalised routes
-│   │   ├── page.tsx        # Homepage
-│   │   ├── reis/           # Commercial bus tour
-│   │   ├── dagboek/        # Public travel journal
-│   │   ├── encyclopedie/   # Mahler encyclopedia (16 locations)
-│   │   ├── concerten/      # Concert agenda
-│   │   ├── over/           # About the founders
-│   │   └── contact/        # Contact form
-│   ├── app/                # Private team app (NOT internationalised)
-│   │   ├── login/
-│   │   ├── dashboard/
-│   │   ├── locaties/       # 11 prospection stops
-│   │   ├── contacten/      # Contacts CRM
-│   │   ├── checklist/      # Shared checklist
-│   │   ├── audio/          # Audio recordings + transcription
-│   │   └── instellingen/   # Settings
-│   ├── globals.css
-│   └── layout.tsx          # Root layout with fonts
-├── components/
-│   ├── ui/                 # shadcn-style primitives (button, card, tabs, etc.)
-│   ├── layout/             # Header, Footer, LocaleSwitcher, Map, FadeIn
-│   ├── home/               # Homepage-specific
-│   └── app/                # Private app shell
-├── lib/
-│   ├── data.ts             # ⭐ Centralised data layer — swap to Supabase here
-│   ├── data/               # Mock data sources (stops, encyclopedia, journal, …)
-│   ├── auth.ts             # Mock auth (localStorage); becomes Supabase Auth
-│   └── utils.ts            # cn(), date helpers
-├── i18n/
-│   ├── routing.ts
-│   └── request.ts
-├── messages/
-│   ├── nl.json             # Dutch translations
-│   └── en.json             # English translations
-├── types/
-│   └── index.ts            # All TS types — 1:1 mapping to future Supabase tables
-└── middleware.ts           # next-intl + private app exemption
-```
-
----
-
-## Routes
-
-### Public (NL default at `/`, EN at `/en/*`)
-
-| Path | Description |
-| --- | --- |
-| `/` | Homepage — hero, four feature columns, Mahler quote, newsletter |
-| `/reis` | Commercial tour 2027: route map, 10-day program, three pricing tiers (€2.995 / €3.295 / €3.950), departure dates (May + Aug 2027), signup form, FAQ |
-| `/dagboek` | Public travel journal: Mapbox map + filterable feed of entries |
-| `/dagboek/[slug]` | Single journal entry detail |
-| `/encyclopedie` | Hub: timeline 1860–1911 + world map + category tabs |
-| `/encyclopedie/[locatie]` | Per-location detail — chronology, works, manuscripts, bibliography, prev/next nav |
-| `/concerten` | Concert agenda 2026 — Toblach, Bolzano, Jihlava |
-| `/over` | About the founders Tom Devaere + Dominique Dejonghe |
-| `/contact` | Contact form |
-
-### Private (under `/app/*`)
-
-| Path | Description |
-| --- | --- |
-| `/app/login` | Magic-link login UI (mock auth — any email works) |
-| `/app/dashboard` | KPI cards, progress, recent activity, next-stop countdown, quick actions |
-| `/app/locaties` | List of 11 prospection stops |
-| `/app/locaties/[id]` | Detail with tabs: Info / Entries / Checklist / Contacts + entry-creation modal |
-| `/app/contacten` | Contacts table with inline status dropdown + notes |
-| `/app/checklist` | Shared checklist grouped by category, progress bar |
-| `/app/audio` | Audio recordings with HTML5 player + transcription field |
-| `/app/instellingen` | Profile, notifications toggle, offline mode, JSON export, logout |
-
----
-
-## Data flow & Supabase migration path
-
-All data access is centralised in **`src/lib/data.ts`**. Every function is `async` and returns the same TypeScript types defined in `src/types/index.ts`. To migrate to Supabase in prompt 2, replace each function body with a Supabase query — no UI changes required.
-
-**Persistence today (mock):**
-- Form submissions → `localStorage` (`mahler.signups`, `mahler.contact`, `mahler.newsletter`)
-- Private journal entries → `localStorage` (`mahler.entries`)
-- Checklist toggles → `localStorage` (`mahler.checklistOverrides`)
-- Contact status/notes → `localStorage` (`mahler.contactOverrides`)
-- Audio transcriptions → `localStorage` (`mahler.transcripts`)
-- User preferences → `localStorage` (`mahler.prefs`)
-- Session → `localStorage` (`mahler.session`)
-
-**Migration map (prompt 2 — Supabase tables):**
-
-| Today | Will become |
-| --- | --- |
-| `PROSPECTION_STOPS` (constant) | `stops` table |
-| `ENCYCLOPEDIA` (constant) | `encyclopedia_locations` + `works` + `manuscripts` + `bibliography` |
-| `JOURNAL_ENTRIES` (constant) | `journal_entries` table (RLS: public read) |
-| `CONCERTS_2026` (constant) | `concerts` table |
-| `CONTACTS` (constant) | `contacts` table (RLS: team only) |
-| `CHECKLIST_ITEMS` (constant) | `checklist_items` table |
-| `AUDIO_RECORDINGS` (constant) | `audio_recordings` (metadata) + Supabase Storage (files) |
-| `MockSession` (localStorage) | `auth.users` via Supabase Auth magic links |
-
----
-
-## 11 prospection stops · 21–30 August 2026
-
-| # | Stop | Country | Date | Mahler period |
-| - | --- | --- | --- | --- |
-| 1 | Kassel | DE | Vr 21/8 | 1883–1885 (2nd Kapellmeister) |
-| 2 | Leipzig | DE | Za 22/8 | 1886–1888 (Symphony 1) |
-| 3 | Praag | CZ | Zo+Ma 23–24/8 | 1885–1886 (Estates Theatre) |
-| 4 | Kaliště | CZ | Di 25/8 | 1860 (birthplace) |
-| 5 | Jihlava | CZ | Di 25/8 | 1860–1875 (childhood) |
-| 6 | Steinbach am Attersee | AT | Di+Wo 25–26/8 | 1893–1896 (1st composing hut) |
-| 7 | Bad Hall | AT | Wo 26/8 | 1880 (first post) |
-| 8 | Wenen | AT | Wo+Do 26–27/8 | Hofoper, grave, deathplace |
-| 9 | Budapest | HU | Do+Vr 27–28/8 | 1888–1891 (Royal Opera) |
-| 10 | Maiernigg | AT | Vr+Za 28–29/8 | 1900–1907 (2nd hut) |
-| 11 | Toblach | IT | Za+Zo 29–30/8 | 1908–1910 (3rd hut) |
-
-## 16 encyclopedia locations
-
-The 11 stops above + 5 additional:
-- **Wenen Konservatorium** (1875–1881)
-- **Ljubljana** (1881–1882)
-- **Olomouc** (1883)
-- **Hamburg** (1891–1897 — VERY IMPORTANT formative period)
-- **New York** (1907–1911)
-- **Parijs** (1911 — death journey)
-
-**Full content** (chronology, works, manuscripts, bibliography): Kaliště · Wenen Hofoper 1897–1907 · Steinbach am Attersee · Maiernigg · Toblach. The other 11 are stubs marked "Wordt uitgebreid".
-
----
-
-## What's NOT in this prompt (intentionally)
-
-The following are explicitly deferred to **prompt 2** (Supabase backend) and **prompt 3**:
-- Supabase project, schema, RLS policies, migrations
-- Real authentication (magic links)
-- File uploads to Supabase Storage
-- Live audio recording (MediaRecorder API)
-- Realtime sync between team members
-- Email sending (SendGrid / Resend)
-
-Today's mock layer demonstrates the full UX flow. The structure (centralised `data.ts`, typed in `/types`) cleanly supports plugging Supabase in without touching UI code.
-
----
 
 ## Deployment
 
-This project is configured for **Vercel**. Push to GitHub and import the repo in Vercel — it will auto-detect Next.js and deploy.
+- **Platform**: Cloudflare Pages (via Wrangler)
+- **Status**: lokaal volledig werkend, productie-deploy pending
+- **Stappen**: `setup_cloudflare_api_key` → `npx wrangler pages project create mahler-reise --production-branch main` → `npm run build && npx wrangler pages deploy dist --project-name mahler-reise`
+- **Voordelen t.o.v. Next.js**: build van 5+ min OOM-kill → 1 sec, response-tijden < 10 ms, één Worker-bundle van 170 KB ipv 60+ pre-rendered pages
 
-Required environment variables in Vercel:
-- `NEXT_PUBLIC_MAPBOX_TOKEN` (optional — falls back to placeholder)
-- `NEXT_PUBLIC_SITE_URL`
+## Wat is verloren gegaan in de Hono-rewrite?
+- `next-intl` middleware → vervangen door simpele `/en/*` Hono-subapp
+- `next/font` Google Fonts → nu `<link>` naar fonts.googleapis.com
+- `next/image` optimalisatie → vervangen door direct `<img>` (Mahler-portret is al lokaal en geoptimaliseerd, dagboek-images van Unsplash met `?w=1200`)
+- `next-pwa` workbox → manifest is er, service worker komt in een latere stap (manueel via `workbox-cli`)
+- Server Components → in Hono is alle JSX gewoon edge-side gerenderd, dus dit verschil is conceptueel maar niet functioneel
+- `react-hook-form` + `zod` → formulieren posten nu naar de Hono-server; client-side validatie volgt later via een lichtere helper
 
-To deploy from CLI:
-```bash
-npm i -g vercel
-vercel
-```
+## Wat is gewonnen?
+- **Build**: 1 sec ipv timeouts/OOM-kills
+- **Bundle**: 171 KB ipv ~600 KB shared chunks
+- **Response**: 4–15 ms per route (lokaal)
+- **Deploy**: 1-klik op Cloudflare Pages — geen Vercel-dependency
+- **D1/KV/R2** klaar voor gebruik in productie (Supabase blijft optie)
+
+## Volgende stappen
+1. **Mapbox**: kaart-component voor `/dagboek` en `/encyclopedie` (Mapbox GL JS via CDN, lazy-loaded client-side)
+2. **Service worker** voor `/app/*` (offline-first, IndexedDB cache)
+3. **Real auth**: Supabase magic-link integratie i.p.v. cookie-based mock
+4. **Cloudflare D1**: schema voor stops, encyclopedie, dagboek, contacten + migratie van mock-data
+5. **Lighthouse > 90** + a11y-pass (focus rings, ARIA-labels, skip-link)
+6. **Productie-deploy** op Cloudflare Pages (`mahler-reise.pages.dev`)
+7. **Custom domein** koppelen na lancering (1 aug 2026)
 
 ---
 
-## Naming convention
-
-**Always "Tom Devaere" — never "Tom de Varen".** This is a hard rule throughout the codebase, content, and translations.
-
-## License & ownership
-
-© 2026 Mahler Reise — Dominique Dejonghe (`dominique.dejonghe@iutum.be`) and Tom Devaere. All rights reserved.
+© 2026 Mahler Reise · Tom Devaere & Dominique Dejonghe

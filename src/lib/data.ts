@@ -1,53 +1,48 @@
-// Centralized data access layer.
-// In prompt 2, replace the mock implementations below with Supabase queries.
-// All functions are async to make that swap drop-in.
+// Centralized data access layer — pure functions, edge-runtime safe.
+// All data is in-memory mock data; ready to swap for Supabase REST calls later.
 
-import { PROSPECTION_STOPS } from './data/stops';
-import { ENCYCLOPEDIA, ENCYCLOPEDIA_CATEGORIES } from './data/encyclopedia';
-import { JOURNAL_ENTRIES } from './data/journal';
-import { CONCERTS_2026 } from './data/concerts';
-import { DAY_PROGRAM, PRICING_TIERS, TOUR_INCLUDED, DEPARTURE_DATES, FAQ_ITEMS } from './data/tour';
-import { CHECKLIST_ITEMS, CONTACTS, AUDIO_RECORDINGS, PRIVATE_JOURNAL, ACTIVITY_FEED } from './data/private';
+import { PROSPECTION_STOPS } from '../data/stops';
+import { ENCYCLOPEDIA, ENCYCLOPEDIA_CATEGORIES } from '../data/encyclopedia';
+import { JOURNAL_ENTRIES } from '../data/journal';
+import { CONCERTS_2026 } from '../data/concerts';
+import {
+  DAY_PROGRAM,
+  PRICING_TIERS,
+  TOUR_INCLUDED,
+  DEPARTURE_DATES,
+  FAQ_ITEMS,
+} from '../data/tour';
+import {
+  CHECKLIST_ITEMS,
+  CONTACTS,
+  AUDIO_RECORDINGS,
+  PRIVATE_JOURNAL,
+  ACTIVITY_FEED,
+} from '../data/private';
 
 import type {
   ProspectionStop,
   EncyclopediaLocation,
   JournalEntry,
   Concert,
-  ChecklistItem,
-  Contact,
-  AudioRecording,
-  PrivateJournalEntry,
-  ActivityEvent,
-  DashboardStats,
-} from '@/types';
+} from '../types';
 
-// ============ PUBLIC DATA ============
-
-export async function getStops(): Promise<ProspectionStop[]> {
+export function getStops(): ProspectionStop[] {
   return PROSPECTION_STOPS;
 }
 
-export async function getStopBySlug(slug: string): Promise<ProspectionStop | undefined> {
-  return PROSPECTION_STOPS.find((s) => s.slug === slug);
-}
-
-export async function getStopById(id: number): Promise<ProspectionStop | undefined> {
-  return PROSPECTION_STOPS.find((s) => s.id === id);
-}
-
-export async function getEncyclopedia(): Promise<EncyclopediaLocation[]> {
+export function getEncyclopedia(): EncyclopediaLocation[] {
   return ENCYCLOPEDIA;
 }
 
-export async function getEncyclopediaBySlug(slug: string): Promise<EncyclopediaLocation | undefined> {
+export function getEncyclopediaBySlug(slug: string): EncyclopediaLocation | undefined {
   return ENCYCLOPEDIA.find((l) => l.slug === slug);
 }
 
-export async function getEncyclopediaNeighbors(slug: string): Promise<{
+export function getEncyclopediaNeighbors(slug: string): {
   prev?: EncyclopediaLocation;
   next?: EncyclopediaLocation;
-}> {
+} {
   const idx = ENCYCLOPEDIA.findIndex((l) => l.slug === slug);
   return {
     prev: idx > 0 ? ENCYCLOPEDIA[idx - 1] : undefined,
@@ -55,63 +50,63 @@ export async function getEncyclopediaNeighbors(slug: string): Promise<{
   };
 }
 
-export async function getJournalEntries(): Promise<JournalEntry[]> {
-  return [...JOURNAL_ENTRIES].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+export function getJournalEntries(): JournalEntry[] {
+  return [...JOURNAL_ENTRIES].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
 }
 
-export async function getJournalEntryBySlug(slug: string): Promise<JournalEntry | undefined> {
+export function getJournalEntryBySlug(slug: string): JournalEntry | undefined {
   return JOURNAL_ENTRIES.find((j) => j.slug === slug);
 }
 
-export async function getConcerts(): Promise<Concert[]> {
-  return [...CONCERTS_2026].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+export function getConcerts(): Concert[] {
+  return [...CONCERTS_2026].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
 }
 
-export async function getDayProgram() {
+export function getDayProgram() {
   return DAY_PROGRAM;
 }
 
-export async function getPricingTiers() {
+export function getPricingTiers() {
   return PRICING_TIERS;
 }
 
-export async function getTourIncluded() {
+export function getTourIncluded() {
   return TOUR_INCLUDED;
 }
 
-export async function getDepartureDates() {
+export function getDepartureDates() {
   return DEPARTURE_DATES;
 }
 
-export async function getFAQ() {
+export function getFAQ() {
   return FAQ_ITEMS;
 }
 
-export { ENCYCLOPEDIA_CATEGORIES };
-
-// ============ PRIVATE DATA ============
-
-export async function getChecklist(): Promise<ChecklistItem[]> {
+export function getChecklist() {
   return CHECKLIST_ITEMS;
 }
 
-export async function getContacts(): Promise<Contact[]> {
+export function getContacts() {
   return CONTACTS;
 }
 
-export async function getAudioRecordings(): Promise<AudioRecording[]> {
+export function getAudioRecordings() {
   return AUDIO_RECORDINGS;
 }
 
-export async function getPrivateJournal(): Promise<PrivateJournalEntry[]> {
+export function getPrivateJournal() {
   return PRIVATE_JOURNAL;
 }
 
-export async function getActivityFeed(): Promise<ActivityEvent[]> {
+export function getActivityFeed() {
   return ACTIVITY_FEED;
 }
 
-export async function getDashboardStats(): Promise<DashboardStats> {
+export function getDashboardStats() {
   return {
     totalStops: PROSPECTION_STOPS.length,
     completedStops: PROSPECTION_STOPS.filter((s) => s.status === 'completed').length,
@@ -124,16 +119,21 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   };
 }
 
-// ============ CONSTANTS ============
+export { ENCYCLOPEDIA_CATEGORIES };
 
 export const SITE_CONFIG = {
   name: 'Mahler Reise',
-  tagline: { nl: 'In de voetsporen van Gustav Mahler', en: 'In the footsteps of Gustav Mahler' },
-  owners: [
-    { name: 'Dominique Dejonghe', email: 'dominique.dejonghe@iutum.be' },
-    { name: 'Tom Devaere', email: 'tom@mahler-reise.be' },
-  ],
+  tagline: {
+    nl: 'In de voetsporen van Gustav Mahler',
+    en: 'In the footsteps of Gustav Mahler',
+  },
   liveDate: '2026-08-01',
   prospectionDates: { start: '2026-08-21', end: '2026-08-30' },
   tourYear: 2027,
 };
+
+export type Locale = 'nl' | 'en';
+
+export function isLocale(s: string): s is Locale {
+  return s === 'nl' || s === 'en';
+}
