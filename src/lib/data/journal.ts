@@ -1,0 +1,188 @@
+import type { JournalEntry } from '@/types';
+
+export const JOURNAL_ENTRIES: JournalEntry[] = [
+  {
+    id: 'j-001',
+    slug: 'kassel-eerste-stop',
+    title: {
+      nl: 'Kassel — waar de Lieder ontstonden',
+      en: 'Kassel — where the Lieder were born',
+    },
+    excerpt: {
+      nl: 'Eerste halte van de prospectiereis. We staan voor het oude Hoftheater waar Mahler in 1883 als 23-jarige aankomt.',
+      en: 'First stop of the prospection tour. We stand in front of the old Hoftheater where Mahler arrived as a 23-year-old in 1883.',
+    },
+    body: {
+      nl: 'Het regent zachtjes wanneer we Kassel binnenrijden. Het oude Hoftheater bestaat niet meer — een bombardement in 1943 heeft er weinig van overgelaten — maar de plek waar Mahler woonde aan de Wolfsschlucht is nog steeds te identificeren. Een gedenkplaat. Niet meer dan dat. We staan er een uur en proberen ons voor te stellen hoe een jonge dirigent met een gebroken hart de eerste maten van de Lieder eines fahrenden Gesellen op papier zet.',
+      en: 'A soft rain falls as we drive into Kassel. The old Hoftheater is gone — a 1943 bombing left little of it — but the place where Mahler lived on the Wolfsschlucht is still identifiable. A memorial plaque. Nothing more. We stand there for an hour and try to imagine a young conductor with a broken heart putting the first bars of Lieder eines fahrenden Gesellen onto paper.',
+    },
+    date: '2026-08-21',
+    location: 'Kassel',
+    country: 'Duitsland',
+    coordinates: [9.4979, 51.3127],
+    author: 'Tom Devaere',
+    coverImage: 'https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=1200',
+    type: 'observation',
+  },
+  {
+    id: 'j-002',
+    slug: 'leipzig-bach-en-mahler',
+    title: {
+      nl: 'Leipzig — tussen Bach en Mahler',
+      en: 'Leipzig — between Bach and Mahler',
+    },
+    excerpt: {
+      nl: 'In het Mendelssohn-Haus ontvangt Dr. Schmidt ons. Hij weet dingen over de Leipziger jaren die in geen biografie staan.',
+      en: 'At the Mendelssohn-Haus, Dr. Schmidt receives us. He knows things about the Leipzig years that no biography contains.',
+    },
+    body: {
+      nl: 'Een ontmoeting van twee uur die in vier urenstilte uitmondt. We praten over Die drei Pintos, het Webersuccessverhaal van 1888, en over hoe Mahler en Cosima Wagner elkaar in de wandelgangen van het Stadttheater ontweken. Schmidt opent een lade en haalt een fotokopie tevoorschijn van een brief die Mahler op 23 juni 1888 schreef.',
+      en: 'A two-hour meeting that ends in four hours of silence. We talk about Die drei Pintos, the Weber success story of 1888, and how Mahler and Cosima Wagner avoided each other in the corridors of the Stadttheater. Schmidt opens a drawer and produces a photocopy of a letter Mahler wrote on 23 June 1888.',
+    },
+    date: '2026-08-22',
+    location: 'Leipzig',
+    country: 'Duitsland',
+    coordinates: [12.3731, 51.3397],
+    author: 'Dominique Dejonghe',
+    coverImage: 'https://images.unsplash.com/photo-1580837119756-563d608dd119?w=1200',
+    type: 'archive',
+  },
+  {
+    id: 'j-003',
+    slug: 'kaliste-geboortehuis',
+    title: {
+      nl: 'Kaliště — het stille huis',
+      en: 'Kaliště — the silent house',
+    },
+    excerpt: {
+      nl: 'Het geboortehuis is kleiner dan we hadden verwacht. Of misschien zijn we groter dan Mahler\'s familie was.',
+      en: 'The birthplace is smaller than we expected. Or perhaps we are larger than Mahler\'s family was.',
+    },
+    body: {
+      nl: 'Het oranje boerenhuis met witte luiken staat er nog. De museumconservatrice mevrouw Nováková sluit de deur achter ons en laat ons een uur alleen. We staan in de kamer waarin op 7 juli 1860 een kind ter wereld kwam dat veertig jaar later de gigantische Achtste symfonie zou schrijven. De stilte is overweldigend.',
+      en: 'The orange farmhouse with white shutters still stands. The curator, Mrs Nováková, closes the door behind us and leaves us alone for an hour. We stand in the room where, on 7 July 1860, a child came into the world who forty years later would write the gigantic Eighth Symphony. The silence is overwhelming.',
+    },
+    date: '2026-08-25',
+    location: 'Kaliště',
+    country: 'Tsjechië',
+    coordinates: [15.2333, 49.4567],
+    author: 'Tom Devaere',
+    coverImage: 'https://images.unsplash.com/photo-1551801841-ecad875a5142?w=1200',
+    type: 'observation',
+  },
+  {
+    id: 'j-004',
+    slug: 'steinbach-attersee-componeerhutje',
+    title: {
+      nl: 'Steinbach — twintig minuten zwemmen',
+      en: 'Steinbach — twenty minutes of swimming',
+    },
+    excerpt: {
+      nl: 'Het Komponierhäuschen aan het Attersee. Een wei. Drie ramen. Hier ontstond de Auferstehung-finale.',
+      en: 'The Komponierhäuschen by Lake Attersee. A meadow. Three windows. Here the Resurrection finale was born.',
+    },
+    body: {
+      nl: 'We zwemmen ook twintig minuten in het meer voor we naar het hutje wandelen. Een kleine eerbetoon aan de zomerroutine van 1894. Het water is nog koud, ondanks augustus. Eenmaal in het hutje voelt het bizar geconcentreerd: alsof de muren zelf nog vibreren met het slotkoraal "Aufersteh\'n, ja aufersteh\'n wirst du." Tom probeert er onaangekondigd een stuk uit de Vierde te neuriën. Het werkt.',
+      en: 'We also swim for twenty minutes in the lake before walking up to the hut. A small tribute to the 1894 summer routine. The water is still cold, despite August. Once inside the hut it feels strangely concentrated: as if the walls themselves still vibrate with the closing chorale "Aufersteh\'n, ja aufersteh\'n wirst du." Tom unannounced hums a passage from the Fourth. It works.',
+    },
+    date: '2026-08-26',
+    location: 'Steinbach am Attersee',
+    country: 'Oostenrijk',
+    coordinates: [13.5526, 47.8064],
+    author: 'Tom Devaere',
+    coverImage: 'https://images.unsplash.com/photo-1517824806704-9040b037703b?w=1200',
+    type: 'observation',
+  },
+  {
+    id: 'j-005',
+    slug: 'wenen-grinzing',
+    title: {
+      nl: 'Grinzing — bij het graf',
+      en: 'Grinzing — at the grave',
+    },
+    excerpt: {
+      nl: 'Een eenvoudige steen. Geen jaartallen. Alleen "GUSTAV MAHLER".',
+      en: 'A simple stone. No dates. Only "GUSTAV MAHLER".',
+    },
+    body: {
+      nl: 'Hij heeft het zelf zo gewild. "Wie mij zoekt, weet wie ik was; wie mij niet zoekt, hoeft het niet te weten." Het kerkhof in Grinzing is op een dinsdagochtend bijna leeg. Iemand heeft een witte roos op de zerk gelegd. We blijven een halfuur. Geen woorden — een keer was genoeg.',
+      en: 'He wanted it that way himself. "Those who seek me will know who I was; those who do not seek me need not know." The Grinzing cemetery on a Tuesday morning is almost empty. Someone has laid a white rose on the stone. We stay half an hour. No words — once was enough.',
+    },
+    date: '2026-08-27',
+    location: 'Wenen',
+    country: 'Oostenrijk',
+    coordinates: [16.3438, 48.2516],
+    author: 'Dominique Dejonghe',
+    coverImage: 'https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=1200',
+    type: 'observation',
+  },
+  {
+    id: 'j-006',
+    slug: 'budapest-koninklijke-opera',
+    title: {
+      nl: 'Budapest — premiere op 20 november 1889',
+      en: 'Budapest — premiere on 20 November 1889',
+    },
+    excerpt: {
+      nl: 'In de gangen van de Magyar Állami Operaház klinkt nog altijd het echo van een 28-jarige directeur die zijn Eerste symfonie ten doop hield.',
+      en: 'In the corridors of the Magyar Állami Operaház, the echo of a 28-year-old director premiering his First symphony still resounds.',
+    },
+    body: {
+      nl: 'Conservator Dr. Kovács laat ons de oorspronkelijke programmaboekjes zien — geel verkleurd, in het Hongaars en Duits — en de partituur die nooit het podium heeft verlaten sinds die eerste, koel ontvangen avond. "Het werk werd niet begrepen," zegt hij. "En toch staat het hier nog, geduldig, wachtend."',
+      en: 'Curator Dr. Kovács shows us the original programmes — yellowed, in Hungarian and German — and the score that has never left the stage since that first, coolly received evening. "The work was not understood," he says. "And yet it is still here, patient, waiting."',
+    },
+    date: '2026-08-28',
+    location: 'Budapest',
+    country: 'Hongarije',
+    coordinates: [19.0402, 47.4979],
+    author: 'Tom Devaere',
+    coverImage: 'https://images.unsplash.com/photo-1551867633-194f125bddfa?w=1200',
+    type: 'archive',
+  },
+  {
+    id: 'j-007',
+    slug: 'maiernigg-villa',
+    title: {
+      nl: 'Maiernigg — vijf minuten klimmen',
+      en: 'Maiernigg — a five-minute climb',
+    },
+    excerpt: {
+      nl: 'Tussen de villa en het hutje ligt een wandelpad met esdoorns en sparren. Mahler liep er elke morgen om half zeven.',
+      en: 'Between the villa and the hut runs a path with maples and spruces. Mahler walked it every morning at six-thirty.',
+    },
+    body: {
+      nl: 'We doen het pad ook. Het kost vijf minuten. Wie hier elf zomers achter elkaar opklom, wist iets dat wij niet weten. Misschien dat een symfonie niet ontstaat in een hoofd, maar in een routine.',
+      en: 'We walk the path too. Five minutes. Whoever climbed it eleven summers in a row knew something we do not. Perhaps a symphony is not born in a head, but in a routine.',
+    },
+    date: '2026-08-29',
+    location: 'Maiernigg',
+    country: 'Oostenrijk',
+    coordinates: [14.2667, 46.6167],
+    author: 'Dominique Dejonghe',
+    coverImage: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200',
+    type: 'travel',
+  },
+  {
+    id: 'j-008',
+    slug: 'toblach-laatste-hutje',
+    title: {
+      nl: 'Toblach — het laatste hutje',
+      en: 'Toblach — the last hut',
+    },
+    excerpt: {
+      nl: 'Hier sluiten we de prospectiereis af. Drie zomers, drie symfonieën, één afscheid.',
+      en: 'Here we close the prospection tour. Three summers, three symphonies, one farewell.',
+    },
+    body: {
+      nl: 'In het Komponierhäuschen van Alt-Schluderbach ontmoeten we Maestro Schäfer van het Gustav Mahler Musikwochen-comité. Hij toont ons de plek waar de schrijftafel stond — een lichte rechthoek op de vloer waar het hout iets minder verkleurd is. "Hier eindigt alles," zegt hij. "En hier begint alles wat na hem komt."',
+      en: 'In the Komponierhäuschen of Alt-Schluderbach we meet Maestro Schäfer of the Gustav Mahler Musikwochen committee. He shows us the spot where the writing desk stood — a lighter rectangle on the floor where the wood is slightly less faded. "Everything ends here," he says. "And everything that comes after him begins here."',
+    },
+    date: '2026-08-30',
+    location: 'Toblach',
+    country: 'Italië',
+    coordinates: [12.2167, 46.7333],
+    author: 'Tom Devaere',
+    coverImage: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=1200',
+    type: 'meeting',
+  },
+];

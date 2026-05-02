@@ -1,0 +1,142 @@
+{
+  "nav": {
+    "home": "Home",
+    "reis": "De Reis",
+    "dagboek": "Reisdagboek",
+    "encyclopedie": "Encyclopedie",
+    "concerten": "Concerten",
+    "over": "Over",
+    "contact": "Contact",
+    "login": "Inloggen",
+    "menu": "Menu"
+  },
+  "home": {
+    "heroTagline": "Een culturele reis",
+    "heroTitle": "Mahler Reise",
+    "heroSubtitle": "In de voetsporen van Gustav Mahler — van zijn geboortehuis in Kaliště tot zijn componeerhutje aan het Toblachermeer.",
+    "ctaJoin": "Boek de reis",
+    "ctaExplore": "Ontdek de route",
+    "featuresTitle": "Vier manieren om Mahler te beleven",
+    "features": {
+      "reis": {
+        "title": "De Reis",
+        "desc": "Tien dagen door de leefwereld van Mahler — bus, gids, premium hotels."
+      },
+      "dagboek": {
+        "title": "Reisdagboek",
+        "desc": "Volg de prospectiereis dag na dag, met foto's, kaart en muzikale ontmoetingen."
+      },
+      "encyclopedie": {
+        "title": "Encyclopedie",
+        "desc": "Zestien locaties, een eeuw geschiedenis — werken, manuscripten, bronnen."
+      },
+      "concerten": {
+        "title": "Concerten",
+        "desc": "Mahler-uitvoeringen 2026 in Toblach, Bolzano en Jihlava — met Tom Devaere."
+      }
+    },
+    "quote": "Een symfonie moet als de wereld zijn. Ze moet alles omvatten.",
+    "quoteAttribution": "Gustav Mahler",
+    "newsletterTitle": "Blijf op de hoogte",
+    "newsletterDesc": "Ontvang updates over de reis, nieuwe dagboekposts en concertdata.",
+    "newsletterPlaceholder": "uw@email.be",
+    "newsletterCta": "Inschrijven"
+  },
+  "reis": {
+    "title": "De Reis 2027",
+    "subtitle": "Tien dagen, elf locaties, één componist.",
+    "intro": "Een unieke groepsreis met luxe touringcar, ervaren gids en exclusieve toegang tot Mahler-archieven en -concerten.",
+    "departuresTitle": "Vertrekdata 2027",
+    "may": "Mei 2027",
+    "august": "Augustus 2027",
+    "programTitle": "Dagprogramma",
+    "includedTitle": "Wat is inbegrepen",
+    "pricingTitle": "Drie pakketten",
+    "premium": "Premium",
+    "comfort": "Comfort",
+    "standard": "Standaard",
+    "perPerson": "per persoon",
+    "signupTitle": "Voorinschrijving",
+    "faqTitle": "Veelgestelde vragen"
+  },
+  "dagboek": {
+    "title": "Reisdagboek",
+    "subtitle": "Volg ons tijdens de prospectiereis 21–30 augustus 2026.",
+    "filters": "Filters",
+    "country": "Land",
+    "month": "Maand",
+    "type": "Type",
+    "all": "Alle",
+    "readMore": "Lees verder",
+    "by": "door"
+  },
+  "encyclopedie": {
+    "title": "Encyclopedie",
+    "subtitle": "Zestien locaties uit het leven van Gustav Mahler (1860–1911).",
+    "timeline": "Tijdlijn",
+    "map": "Kaart",
+    "categories": "Categorieën",
+    "period": "Periode",
+    "duration": "Duur",
+    "works": "Werken",
+    "manuscripts": "Manuscripten",
+    "bibliography": "Bibliografie",
+    "comingSoon": "Wordt uitgebreid",
+    "previous": "Vorige",
+    "next": "Volgende"
+  },
+  "concerten": {
+    "title": "Concerten 2026",
+    "subtitle": "Mahler-uitvoeringen waarbij we aanwezig zijn — met Tom Devaere als violist.",
+    "tickets": "Tickets",
+    "moreInfo": "Meer info"
+  },
+  "over": {
+    "title": "Over ons",
+    "vision": "Onze visie",
+    "supporters": "Met steun van"
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Vragen, suggesties of interesse om mee te reizen? Stuur ons een bericht.",
+    "name": "Naam",
+    "email": "E-mail",
+    "subject": "Onderwerp",
+    "message": "Bericht",
+    "send": "Verstuur",
+    "success": "Bedankt — we nemen spoedig contact op.",
+    "error": "Er ging iets mis. Probeer opnieuw."
+  },
+  "footer": {
+    "rights": "Alle rechten voorbehouden",
+    "tagline": "In de voetsporen van Gustav Mahler",
+    "legal": "Juridisch",
+    "privacy": "Privacy",
+    "terms": "Algemene voorwaarden",
+    "cookies": "Cookies"
+  },
+  "auth": {
+    "loginTitle": "Inloggen",
+    "loginSubtitle": "Toegang voor het prospectie-team",
+    "email": "E-mail",
+    "magicLink": "Stuur magic link",
+    "demo": "Demo: gebruik elk e-mailadres om in te loggen",
+    "logout": "Uitloggen"
+  },
+  "app": {
+    "dashboard": "Dashboard",
+    "locaties": "Locaties",
+    "contacten": "Contacten",
+    "checklist": "Checklist",
+    "audio": "Audio",
+    "instellingen": "Instellingen",
+    "welcomeBack": "Welkom terug",
+    "nextStop": "Volgende halte",
+    "progress": "Voortgang",
+    "recentActivity": "Recente activiteit",
+    "quickActions": "Snelle acties",
+    "newEntry": "Nieuwe entry",
+    "addContact": "Contact toevoegen",
+    "uploadAudio": "Audio uploaden"
+  }
+}
