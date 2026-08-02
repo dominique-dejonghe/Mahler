@@ -128,7 +128,7 @@ export const SITE_CONFIG = {
     en: 'In the footsteps of Gustav Mahler',
   },
   liveDate: '2026-08-01',
-  prospectionDates: { start: '2026-08-21', end: '2026-08-30' },
+  prospectionDates: { start: '2026-08-22', end: '2026-09-07' },
   tourYear: 2027,
 };
 

@@ -10,6 +10,7 @@ const NL = {
   nav: {
     home: 'Home',
     reis: 'De Reis',
+    routeplan: 'Routeplan',
     dagboek: 'Reisdagboek',
     encyclopedie: 'Encyclopedie',
     concerten: 'Concerten',
@@ -145,6 +146,7 @@ const EN = {
   nav: {
     home: 'Home',
     reis: 'The Tour',
+    routeplan: 'Route plan',
     dagboek: 'Travel Journal',
     encyclopedie: 'Encyclopedia',
     concerten: 'Concerts',

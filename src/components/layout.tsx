@@ -97,6 +97,7 @@ function Header({ locale, pathname }: { locale: Locale; pathname: string }) {
   const t = messages[locale];
   const navItems: { key: keyof typeof t.nav; href: string }[] = [
     { key: 'reis', href: '/reis' },
+    { key: 'routeplan', href: '/routeplan' },
     { key: 'dagboek', href: '/dagboek' },
     { key: 'encyclopedie', href: '/encyclopedie' },
     { key: 'concerten', href: '/concerten' },

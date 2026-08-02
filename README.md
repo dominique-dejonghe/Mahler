@@ -6,7 +6,7 @@
 - **Naam**: Mahler Reise
 - **Eigenaars**: Dominique Dejonghe (dominique.dejonghe@iutum.be) & Tom Devaere (tom@mahler-reise.be)
 - **Lanceringsdeadline**: 1 augustus 2026
-- **Doel**: Publiekssite + privé prospectie-app voor een 10-daagse Mahler-tour (2027) met bijhorend reisdagboek (prospectie 21–30 augustus 2026), encyclopedie (16 locaties, 1860–1911), en concertagenda 2026.
+- **Doel**: Publiekssite + privé prospectie-app voor een 10-daagse Mahler-tour (2027) met bijhorend reisdagboek (prospectiereis **22 augustus – 7 september 2026**, 17 dagen, MG electric via Tesla V3 Superchargers), encyclopedie (16 locaties, 1860–1911), en concertagenda 2026.
 
 ## Tech Stack
 - **Framework**: Hono 4 op Cloudflare Workers / Pages
@@ -20,14 +20,16 @@
 - **Dev/runtime**: Wrangler Pages dev server (PM2-managed)
 
 ## URLs
-- **Sandbox preview**: https://3000-ismpwjkowl7e0f3tdmq66-02b9cc79.sandbox.novita.ai
-- **Productie**: nog te deployen op Cloudflare Pages
+- **Productie**: https://mahler-reise.pages.dev
+- **Laatste deploy**: https://16d848d3.mahler-reise.pages.dev
+- **GitHub**: https://github.com/dominique-dejonghe/Mahler
 
 ## Routes — publiek (Nederlands, default)
 | Route | Inhoud |
 |---|---|
 | `/` | Homepage met hero (lokale Mahler-portretfoto), 4 feature-kaarten, citaat, nieuwsbrief |
 | `/reis` | Bus-tour 2027 — vertrekdata, dagprogramma, inclusief, 3 prijspakketten (Standaard €2 995 / Comfort €3 295 / Premium €3 950), voorinschrijfformulier, FAQ |
+| `/routeplan` | **Prospectiereis 2026** — interactieve Leaflet-kaart (OpenStreetMap), 17 dag-etappes Sint-Amands → Kassel → Toblach → Venetië → Neuschwanstein → Nismes, km/dag, 4 Tesla V3 Superchargers, hard deadline Nismes 14:00 op 7 sep |
 | `/dagboek` | Reisdagboek-overzicht (prospectiereis aug 2026) met cover-images van Unsplash |
 | `/dagboek/:slug` | Dagboek-detail met cover, datum-/locatie-badges en lange tekst |
 | `/encyclopedie` | 16 locaties + horizontale tijdlijn 1860–1911 |

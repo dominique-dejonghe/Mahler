@@ -27,6 +27,7 @@ import {
   AudioPage,
   InstellingenPage,
 } from './routes/app';
+import { RouteplanPage } from './routes/routeplan';
 
 import {
   getJournalEntryBySlug,
@@ -73,6 +74,7 @@ app.get('/encyclopedie/:slug', (c) => {
   return c.html(<EncyclopedieDetailPage locale="nl" slug={slug} />);
 });
 app.get('/concerten', (c) => c.html(<ConcertenPage locale="nl" />));
+app.get('/routeplan', (c) => c.html(<RouteplanPage locale="nl" />));
 app.get('/over', (c) => c.html(<OverPage locale="nl" />));
 app.get('/contact', (c) => c.html(<ContactPage locale="nl" />));
 app.post('/contact', async (c) => {
@@ -103,6 +105,7 @@ en.get('/encyclopedie/:slug', (c) => {
   return c.html(<EncyclopedieDetailPage locale="en" slug={slug} />);
 });
 en.get('/concerten', (c) => c.html(<ConcertenPage locale="en" />));
+en.get('/routeplan', (c) => c.html(<RouteplanPage locale="en" />));
 en.get('/over', (c) => c.html(<OverPage locale="en" />));
 en.get('/contact', (c) => c.html(<ContactPage locale="en" />));
 en.post('/contact', async (c) => {
