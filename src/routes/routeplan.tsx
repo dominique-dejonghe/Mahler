@@ -21,9 +21,18 @@ export function RouteplanPage({ locale }: { locale: Locale }) {
 
   // Prep data for the client-side Leaflet script as a plain JSON payload
   const mapPayload = {
+    locale,
+    labels: {
+      day: locale === 'nl' ? 'Dag' : 'Day',
+      overnight: locale === 'nl' ? 'Overnachting' : 'Overnight',
+      rest: locale === 'nl' ? 'rustdag' : 'rest day',
+      time: locale === 'nl' ? 'Rijtijd' : 'Driving time',
+      tesla: 'Tesla Supercharger',
+    },
     segments: ROUTE_SEGMENTS.map((s) => ({
       day: s.day,
       date: s.date,
+      dateLabel: fmtDate(s.date, locale),
       from: s.from,
       to: s.to,
       fromCoords: s.fromCoords,
@@ -74,12 +83,17 @@ export function RouteplanPage({ locale }: { locale: Locale }) {
 
       {/* Interactive Leaflet map */}
       <Section>
-        <div class="mb-6 flex flex-wrap gap-3 text-xs">
+        <div class="mb-3 flex flex-wrap gap-3 text-xs">
           <Legend color="#2C5F4D" label={locale === 'nl' ? 'Mahler-locatie' : 'Mahler location'} />
           <Legend color="#B8860B" label={locale === 'nl' ? 'Doorreis / thuis' : 'Transit / home'} />
           <Legend color="#DC2626" label="Tesla Supercharger" isDot />
           <Legend color="#2C5F4D" label={locale === 'nl' ? 'Route' : 'Route'} isLine />
         </div>
+        <p class="mb-4 text-xs text-primary-700/60">
+          {locale === 'nl'
+            ? 'Klik een dagnummer, etappe of tabelrij om datum, traject, km, rijtijd, Tesla-stop en overnachting te zien.'
+            : 'Click a day number, leg or table row to see date, route, km, driving time, Tesla stop and overnight.'}
+        </p>
         <div id="route-map" style="height:600px" class="rounded-lg border-2 border-primary-100 shadow-lg overflow-hidden bg-cream-100"></div>
       </Section>
 
@@ -101,7 +115,11 @@ export function RouteplanPage({ locale }: { locale: Locale }) {
               </thead>
               <tbody class="divide-y divide-primary-100">
                 {ROUTE_SEGMENTS.map((s) => (
-                  <tr class={s.km === 0 ? 'bg-cream-200/60' : ''}>
+                  <tr
+                    data-route-day={s.day}
+                    class={`route-day-row cursor-pointer ${s.km === 0 ? 'bg-cream-200/60' : ''}`}
+                    title={locale === 'nl' ? 'Toon op kaart' : 'Show on map'}
+                  >
                     <td class="px-4 py-3 font-display font-bold text-primary">{s.day}</td>
                     <td class="px-4 py-3">
                       <div class="font-semibold">{fmtDate(s.date, locale)}</div>

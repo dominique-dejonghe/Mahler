@@ -40,6 +40,113 @@ h1, h2, h3, h4, .font-display {
 @keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
 main > section { animation: fadeIn .5s ease both; }
 
+/* Routeplan map: dagoverzicht popups, numbered pins, table sync */
+.rp-day-icon { background: transparent !important; border: none !important; }
+.rp-day-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #fff;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  letter-spacing: -0.02em;
+}
+.rp-km-chip {
+  background: #B8860B;
+  color: #fff;
+  padding: 2px 8px;
+  border: 0;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  font-family: 'Crimson Text', Georgia, serif;
+  cursor: pointer;
+  line-height: 1.4;
+  display: inline-block;
+}
+.rp-km-chip--rest { background: #2C5F4D; }
+.rp-km-chip:hover { filter: brightness(1.08); }
+
+.leaflet-popup-content-wrapper {
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(26, 57, 46, 0.18);
+}
+.leaflet-popup-content { margin: 12px 14px; min-width: 200px; }
+.rp-popup-place {
+  display: block;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.05em;
+  color: #2C5F4D;
+  margin-bottom: 8px;
+}
+.rp-popup-kicker {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.8em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #B8860B;
+  font-weight: 700;
+}
+.rp-popup-date {
+  font-size: 0.9em;
+  color: #1A392E;
+  font-weight: 600;
+  margin: 2px 0 4px;
+}
+.rp-popup-leg {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: #2C5F4D;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.rp-popup-note {
+  margin: 8px 0 0;
+  font-size: 0.85em;
+  color: #3d4f47;
+  line-height: 1.45;
+}
+.rp-popup-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-top: 8px;
+  font-size: 0.8em;
+  color: #1A392E;
+}
+.rp-popup-meta span {
+  background: #FAF7F0;
+  border: 1px solid #d5e4dc;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.rp-popup-rest {
+  background: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #047857 !important;
+}
+.rp-popup-tesla {
+  margin-top: 8px;
+  color: #DC2626;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+.rp-popup-hr {
+  border: 0;
+  border-top: 1px solid #d5e4dc;
+  margin: 12px 0;
+}
+.route-day-row:hover { background: #F2EBD9; }
+.route-day-row:focus { outline: 2px solid #B8860B; outline-offset: -2px; }
+.route-day-active { background: #E8F0EC !important; box-shadow: inset 3px 0 0 #2C5F4D; }
+
 /* Print */
 @media print {
   header, footer, .no-print { display: none !important; }
