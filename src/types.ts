@@ -87,6 +87,13 @@ export interface AtlasEvent {
   posthumous?: boolean;
   firstDecade?: boolean;
   pinOverride?: { lat: number; lng: number; precision: PinPrecision };
+  /** Mahler conducting one of his own symphonies. */
+  selfConducted?: boolean;
+  completeness?: 'complete' | 'fragment';
+  fragmentScope?: Localized;
+  /** Hall only when the source list names one. Never fall back to a city theatre. */
+  hall?: Localized;
+  belgium?: boolean;
 }
 
 export interface Work {

@@ -38,10 +38,13 @@ export function residencesOnDate(iso: string, opts?: { deep?: boolean }): Reside
 }
 
 export function nearestEvent(iso: string, opts?: { deep?: boolean }): { event: AtlasEvent; distanceDays: number } | null {
+  return nearestAmong(iso, allEvents.filter((e) => (opts?.deep ? true : !e.deep)));
+}
+
+export function nearestAmong(iso: string, events: AtlasEvent[]): { event: AtlasEvent; distanceDays: number } | null {
   const t = dayNumber(iso);
   let best: { event: AtlasEvent; distanceDays: number } | null = null;
-  for (const e of allEvents) {
-    if (!opts?.deep && e.deep) continue;
+  for (const e of events) {
     const a = dayNumber(e.dateStart);
     const b = dayNumber(e.dateEnd ?? e.dateStart);
     const dist = t < a ? a - t : t > b ? t - b : 0;

@@ -1,4 +1,4 @@
-import { eventPlace } from '../data';
+import { eventPlace, venueOf } from '../data';
 import { formatDate } from '../lib/dates';
 import { t, ui } from '../lib/i18n';
 import type { AtlasEvent, Locale } from '../types';
@@ -15,10 +15,15 @@ export function EventSheet({
   onClose: () => void;
 }) {
   const place = eventPlace(event);
+  const hall = venueOf(event);
   return (
     <aside className="sheet" aria-live="polite">
       <div className="kicker">
         {ui.types[event.type][locale]}
+        {event.selfConducted ? ` · ${t('selfOnPodium', locale)}` : ''}
+        {event.completeness === 'complete' ? ` · ${t('complete', locale)}` : ''}
+        {event.completeness === 'fragment' ? ` · ${t('fragment', locale)}` : ''}
+        {event.belgium ? (locale === 'nl' ? ' · België' : locale === 'de' ? ' · Belgien' : locale === 'cs' ? ' · Belgie' : ' · Belgium') : ''}
         {event.posthumous ? ` · ${t('posthumous', locale)}` : ''}
       </div>
       <h2>{event.title[locale]}</h2>
@@ -26,7 +31,7 @@ export function EventSheet({
         {formatDate(event.dateStart, locale)}
         {event.dateEnd && event.dateEnd !== event.dateStart ? ` – ${formatDate(event.dateEnd, locale)}` : ''}
         {place ? ` · ${place.city[locale]}` : ''}
-        {place?.venue ? ` · ${place.venue[locale]}` : ''}
+        {hall ? ` · ${hall[locale]}` : ''}
       </p>
       <p>{event.summary[locale]}</p>
       <p className="extra">{event.extra[locale]}</p>

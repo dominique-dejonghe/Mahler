@@ -1,7 +1,8 @@
-import type { Affiliation, AtlasEvent, Place, Residence, Work } from '../types';
+import type { Affiliation, AtlasEvent, Localized, Place, Residence, Work } from '../types';
 import { affiliations } from './affiliations';
 import { deepEvents } from './deep';
 import { lifeEvents } from './events';
+import { eventVenue, selfConductedEvents } from './mahlerConducted';
 import { performances } from './performances';
 import { placeById, places } from './places';
 import { residences } from './residences';
@@ -9,6 +10,18 @@ import { works } from './works';
 
 export { affiliations, deepEvents, lifeEvents, performances, placeById, places, residences, works };
 export { trip2026, tripWindow } from './trip2026';
+export {
+  belgiumComplete,
+  completeNights,
+  eventVenue,
+  fragmentNights,
+  neverSelfConducted,
+  nightsInCity,
+  premiereNight,
+  selfConductedEvents,
+  selfNights,
+  selfStats,
+} from './mahlerConducted';
 
 function affiliationEvents(): AtlasEvent[] {
   return affiliations.map((a) => ({
@@ -31,9 +44,14 @@ function affiliationEvents(): AtlasEvent[] {
 export const allEvents: AtlasEvent[] = [
   ...lifeEvents,
   ...affiliationEvents(),
+  ...selfConductedEvents,
   ...performances,
   ...deepEvents,
 ];
+
+export function venueOf(event: AtlasEvent): Localized | undefined {
+  return eventVenue(event, eventPlace(event)?.venue);
+}
 
 export function eventPlace(event: AtlasEvent): Place | undefined {
   return placeById[event.placeId];

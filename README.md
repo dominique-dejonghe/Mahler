@@ -27,9 +27,11 @@ No environment variables. Chat and locale persist in `localStorage`.
 1. **Atlas** — Leaflet map (Europe + New York) and a year slider 1860–1921. Drag the year; Mahler moves to the best documented pin. Click a city or date. Types: childhood, conducting posts, guest nights, summer huts, death, grave, premieres, performances.
 2. **Gustaaf** — persistent chat. Structured JSON first. If the day has no exact pin, it says so and offers the nearest documented residence or post. It does not invent streets.
 3. **Huizen** — opera houses and orchestras (Bad Hall → New York), Kapellmeister vs director vs guest, years, source.
-4. **Symfonieën** — premieres of 1–9, Das Lied, and the unfinished 10th (Schalk 1924 + Cooke 1964, marked posthumous). Notable performances in his lifetime and a finite 1911–1921 set (Walter, Mengelberg, Stokowski). Every row has `source`. The UI states this is not a complete Martner.
+4. **Symfonieën** — nights Mahler himself conducted 1–8, plus premieres of 9, Das Lied, and the unfinished 10th (Schalk 1924 + Cooke 1964, marked posthumous). A finite 1911–1921 set (Walter, Mengelberg, Stokowski) sits under that. Every row has `source`.
 
-Toggles: opera-winter / composing-summer; optional **Jij staat hier** (Tongeren → … → Sint-Amands, 22 Aug–7 Sep 2026, no hotels); **Dieper** for Alma / family / conversion.
+Toggles: opera-winter / composing-summer; **Mahler zelf op de bok** (map + timeline); optional **Jij staat hier** (Tongeren → … → Sint-Amands, 22 Aug–7 Sep 2026, no hotels); **Dieper** for Alma / family / conversion.
+
+Self-conducted layer (Mahler Foundation / Martner–Banks mahlercat): **71 complete** public performances of 1–8 by him; **4 fragments**, marked separately and not counted. Belgium: exactly two complete nights (Liège 1899 Second, Antwerp 1906 Fifth). No Brussels. 9 / Das Lied / 10: never by him.
 
 ## Data schema
 
@@ -54,6 +56,9 @@ type AtlasEvent = {
   orchestra?: Localized
   posthumous?: boolean
   firstDecade?: boolean      // 18 May 1911 – 18 May 1921
+  selfConducted?: boolean    // he conducts his own 1–8
+  completeness?: 'complete' | 'fragment'
+  hall?: Localized           // only when the source list names a hall
 }
 ```
 
@@ -65,7 +70,7 @@ Places have `lat`/`lng` and `pinPrecision`: `venue` | `city` | `residence` | `un
 
 Hypothesis (kept): one events list queried by date range is more trustworthy than an LLM. Gustaaf never calls a model.
 
-It can answer: where on a date; which house/orchestra; when a symphony was first played and by whom; what is documented in a city. Short answer, one extra fact, Dutch first. Guide *about* Mahler, not a first-person impersonation.
+It can answer: where on a date; which house/orchestra; when a symphony was first played and by whom; how often he himself conducted a work; Belgium and New York from the self-conducted set; what is documented in a city. Short answer, one extra fact, Dutch first. Guide *about* Mahler, not a first-person impersonation. It does not invent halls or extra nights.
 
 ## Sources (seed)
 
@@ -77,7 +82,8 @@ It can answer: where on a date; which house/orchestra; when a symphony was first
 
 ## Known gaps
 
-- Not a complete Knud Martner chronology. Guest nights are a sample.
+- Self-conducted 1–8: 71 complete + 4 fragments in `src/data/mahlerConducted.ts`. That list is finite and cited (Mahler Foundation / Martner–Banks mahlercat), not a padded Martner.
+- Not a complete Knud Martner chronology for opera nights and other people’s performances. Guest nights outside this layer remain a sample.
 - Many winter days resolve to a **post**, not a street. That is stated in the UI.
 - Between posts (e.g. spring–summer 1882) there is no honest residence; Gustaaf offers the nearest window.
 - Exact summer arrival days at Steinbach / Maiernigg / Toblach are often undocumented; those are seasonal windows.

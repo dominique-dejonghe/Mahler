@@ -151,6 +151,10 @@ button { cursor: pointer; }
 .pin.premiere { background: #f0d48a; }
 .pin.performance { background: #b0894a; }
 .pin.residence, .pin.life { background: #9a8660; }
+.pin.fragment { background: transparent; border-color: var(--gold-bright); }
+.pin.belgium {
+  box-shadow: 0 0 0 2px rgba(196, 163, 90, 0.9), 0 0 16px rgba(212, 160, 106, 0.5);
+}
 .pin.active { transform: scale(1.35); box-shadow: 0 0 0 2px var(--gold-bright), 0 0 18px rgba(228, 195, 106, 0.7); }
 
 .trip-pin {
@@ -191,6 +195,28 @@ button { cursor: pointer; }
   color: var(--gold-bright);
 }
 .timeline-date { color: var(--paper-dim); font-size: 0.85rem; }
+.timeline-track { position: relative; }
+.timeline-ticks {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  height: 10px;
+  pointer-events: none;
+}
+.timeline-ticks .tick {
+  pointer-events: auto;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: var(--gold);
+  transform: translateX(-50%);
+}
+.timeline-ticks .tick.fragment { background: transparent; border: 1px solid var(--gold-bright); }
+.timeline-ticks .tick.belgium { background: var(--gold-bright); box-shadow: 0 0 0 2px rgba(196, 163, 90, 0.45); }
 .timeline input[type="range"] {
   width: 100%;
   accent-color: var(--gold);
@@ -336,6 +362,49 @@ button { cursor: pointer; }
   margin: 10px 0 16px;
   color: var(--paper-dim);
   font-size: 0.92rem;
+}
+.self-overview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 18px;
+}
+.self-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--paper);
+  padding: 8px 9px;
+  text-align: left;
+}
+.self-cell strong {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.35rem;
+  color: var(--gold-bright);
+}
+.self-cell span { font-size: 0.82rem; color: var(--paper-dim); }
+.self-cell em { font-style: normal; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--gold); }
+.night-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 0 4px;
+  border: 0;
+  border-top: 1px solid rgba(196, 163, 90, 0.15);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+.never-card { border-color: var(--gold); }
+
+@media (max-width: 520px) {
+  .self-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (min-width: 880px) {

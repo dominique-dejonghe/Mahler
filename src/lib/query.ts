@@ -1,7 +1,21 @@
-import { affiliations, allEvents, eventPlace, placeById, works } from '../data';
-import type { AtlasEvent, Locale, QueryAnswer, WorkId } from '../types';
-import { parseDatesFromText, parseYearFromText } from './dates';
+import {
+  affiliations,
+  allEvents,
+  belgiumComplete,
+  completeNights,
+  eventPlace,
+  fragmentNights,
+  neverSelfConducted,
+  nightsInCity,
+  placeById,
+  premiereNight,
+  selfStats,
+  works,
+} from '../data';
+import type { AtlasEvent, Locale, Localized, QueryAnswer, WorkId } from '../types';
+import { formatDate, parseDatesFromText, parseYearFromText } from './dates';
 import { describeHit, eventsOnDate, locateOnDate } from './locate';
+import type { SelfNight, SelfWorkId } from '../data/mahlerConducted';
 
 const PLACE_ALIASES: Record<string, string[]> = {
   kaliste: ['kaliste', 'kalischt', 'kaliště', 'kalischt'],
@@ -20,7 +34,8 @@ const PLACE_ALIASES: Record<string, string[]> = {
   prague_vystaviste: ['výstaviště', 'vystaviste', 'zasche'],
   prague_modra_hvezda: ['modrá hvězda', 'modra hvezda', 'blue star'],
   leipzig: ['leipzig', 'lipsko'],
-  budapest_opera: ['boedapest', 'budapest', 'budapešť', 'budapest'],
+  budapest_opera: ['boedapest opera', 'hungarian opera', 'koninklijke hongaarse'],
+  budapest: ['boedapest', 'budapest', 'budapešť'],
   hamburg: ['hamburg', 'hamburk'],
   steinbach: ['steinbach', 'attersee'],
   maiernigg: ['maiernigg', 'wörthersee', 'worthersee', 'maria wörth', 'maria worth'],
@@ -32,9 +47,31 @@ const PLACE_ALIASES: Record<string, string[]> = {
   essen: ['essen'],
   amsterdam: ['amsterdam', 'concertgebouw'],
   new_york_met: ['metropolitan', 'met opera', 'oude met'],
-  new_york_carnegie: ['new york', 'nieuw-york', 'ny phil', 'philharmonic', 'carnegie'],
+  new_york: ['new york', 'nieuw-york', 'nieuw york'],
+  new_york_carnegie: ['ny phil', 'philharmonic', 'carnegie'],
   london: ['londen', 'london', 'londýn', 'proms'],
   paris: ['parijs', 'paris', 'paříž', 'pariz'],
+  weimar: ['weimar', 'výmar', 'vymar'],
+  frankfurt: ['frankfurt'],
+  lemberg: ['lemberg', 'lviv', 'lwow', 'lwów'],
+  brno: ['brno', 'brunn', 'brünn'],
+  linz: ['linz', 'linec'],
+  trieste: ['triest', 'triëst', 'trieste', 'terst'],
+  wiesbaden: ['wiesbaden'],
+  liege: ['luik', 'liege', 'liège', 'luttich', 'lüttich'],
+  basel: ['basel', 'bazel', 'bale', 'basilej'],
+  heidelberg: ['heidelberg'],
+  mannheim: ['mannheim'],
+  breslau: ['breslau', 'wroclaw', 'wrocław', 'vratislav'],
+  graz: ['graz', 'štýrský', 'styrsky'],
+  mainz: ['mainz', 'moguntia', 'mohuč'],
+  strasbourg: ['straatsburg', 'strasbourg', 'straßburg', 'strassburg', 'štrasburk'],
+  antwerp: ['antwerpen', 'antwerp', 'antverpy'],
+  rome: ['rome', 'roma', 'rom', 'řím', 'rim'],
+  st_petersburg: ['sint-petersburg', 'st petersburg', 'sankt petersburg', 'petrograd', 'petrohrad'],
+  the_hague: ['den haag', 'the hague', 'haag', "s-gravenhage"],
+  berlin_philharmonie: ['philharmonie'],
+  budapest_vigado: ['vigado', 'vigadó'],
   tongeren: ['tongeren', 'tongern'],
   venice: ['venetië', 'venetie', 'venice', 'venedig', 'benátky'],
   bolzano: ['bolzano', 'bozen'],
@@ -72,7 +109,153 @@ export function parsePlaces(text: string): string[] {
 
 export function parseWorks(text: string): WorkId[] {
   const q = norm(text);
-  return WORK_ALIASES.filter((w) => w.keys.some((k) => q.includes(norm(k)))).map((w) => w.id);
+  const fromWords = WORK_ALIASES.filter((w) => w.keys.some((k) => q.includes(norm(k)))).map((w) => w.id);
+  const ord = q.match(/\b(?:(?:de|die|the)\s+)?(?:nr\.?|no\.?)?\s*([1-9]|10)\s*(?:e|de|ste|te|th|nd|rd|st)\b/)
+    ?? q.match(/\b(?:nr\.?|no\.?)\s*([1-9]|10)\b/);
+  if (ord) {
+    const id = (ord[1] === '10' ? '10' : ord[1]) as WorkId;
+    if (['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].includes(id) && !fromWords.includes(id)) {
+      fromWords.push(id);
+    }
+  }
+  return fromWords;
+}
+
+function wantsCount(q: string): boolean {
+  return /\b(hoe vaak|how often|how many|wie oft|wie oft|kolik|aantal|keer|times|maal|only|enkel|jednou)\b/i.test(q);
+}
+
+function wantsSelf(q: string): boolean {
+  return /\b(zelf|bok|dirigeerde|dirigeren|conducted|himself|selbst|sam)\b/i.test(q);
+}
+
+function wantsBelgium(q: string): boolean {
+  return /\b(belgie|belgium|belgien|belgie|luik|liege|antwerp|antwerpen|brussel|brussels|brusel|brussel)\b/i.test(norm(q));
+}
+
+function isSelfWork(id: WorkId): id is SelfWorkId {
+  return ['1', '2', '3', '4', '5', '6', '7', '8'].includes(id);
+}
+
+function listNights(nights: SelfNight[], locale: Locale, limit = 8): string {
+  return nights
+    .slice(0, limit)
+    .map((n) => {
+      const city = placeById[n.placeId]?.city[locale] ?? n.placeId;
+      return `${formatDate(n.date, locale)}, ${city}`;
+    })
+    .join('; ');
+}
+
+function answerNever(workId: WorkId, locale: Locale): QueryAnswer {
+  const work = works.find((w) => w.id === workId);
+  const row = neverSelfConducted.find((n) => n.workId === workId);
+  const place = row?.placeId ? placeById[row.placeId] : undefined;
+  const date = row?.date ? formatDate(row.date, locale) : '';
+  const text: Localized = row?.unfinished
+    ? {
+        nl: `${work?.title.nl ?? 'Tiende'}: onvoltooid. Hij heeft haar nooit gedirigeerd. Geen complete uitvoering door hem.`,
+        en: `${work?.title.en ?? 'Tenth'}: unfinished. He never conducted it. No complete performance by him.`,
+        de: `${work?.title.de ?? 'Zehnte'}: unvollendet. Er hat sie nie dirigiert. Keine vollständige Aufführung durch ihn.`,
+        cs: `${work?.title.cs ?? 'Desátá'}: nedokončena. Nikdy ji nedirigoval. Žádné úplné provedení jím.`,
+      }
+    : {
+        nl: `${work?.title.nl}: nooit door hem. Première ${row?.conductor ?? 'Walter'}, ${date}${place ? `, ${place.city.nl}` : ''}.`,
+        en: `${work?.title.en}: never by him. Premiere ${row?.conductor ?? 'Walter'}, ${date}${place ? `, ${place.city.en}` : ''}.`,
+        de: `${work?.title.de}: nie durch ihn. Uraufführung ${row?.conductor ?? 'Walter'}, ${date}${place ? `, ${place.city.de}` : ''}.`,
+        cs: `${work?.title.cs}: nikdy jím. Premiéra ${row?.conductor ?? 'Walter'}, ${date}${place ? `, ${place.city.cs}` : ''}.`,
+      };
+  return {
+    text,
+    extra: {
+      nl: 'Fragmenten of later werk van anderen tellen hier niet.',
+      en: 'Fragments or later work by others do not count here.',
+      de: 'Fragmente oder spätere Arbeit anderer zählen hier nicht.',
+      cs: 'Fragmenty nebo pozdější práce jiných se tu nepočítají.',
+    },
+    eventIds: row?.eventId ? [row.eventId] : [],
+    unknown: false,
+    inferred: false,
+  };
+}
+
+function answerSelfCount(workId: SelfWorkId, locale: Locale): QueryAnswer {
+  const complete = completeNights(workId);
+  const fragments = fragmentNights(workId);
+  const work = works.find((w) => w.id === workId);
+  const prem = premiereNight(workId);
+  const text: Localized = {
+    nl: `${work?.title.nl}: ${complete.length} complete keren door hem. ${listNights(complete, 'nl')}.`,
+    en: `${work?.title.en}: ${complete.length} complete times by him. ${listNights(complete, 'en')}.`,
+    de: `${work?.title.de}: ${complete.length} vollständige Male durch ihn. ${listNights(complete, 'de')}.`,
+    cs: `${work?.title.cs}: ${complete.length} úplných provedení jím. ${listNights(complete, 'cs')}.`,
+  };
+  void locale;
+  const extra: Localized = fragments.length
+    ? {
+        nl: `${fragments.length} fragment${fragments.length === 1 ? '' : 'en'}, niet meegeteld: ${listNights(fragments, 'nl')}.`,
+        en: `${fragments.length} fragment${fragments.length === 1 ? '' : 's'}, not counted: ${listNights(fragments, 'en')}.`,
+        de: `${fragments.length} Fragment${fragments.length === 1 ? '' : 'e'}, nicht mitgezählt: ${listNights(fragments, 'de')}.`,
+        cs: `${fragments.length} fragment${fragments.length === 1 ? '' : 'y'}, nepočítají se: ${listNights(fragments, 'cs')}.`,
+      }
+    : {
+        nl: prem ? `Eerste keer dat hij haar dirigeerde: ${formatDate(prem.date, 'nl')}, ${placeById[prem.placeId]?.city.nl}.` : '',
+        en: prem ? `First time he conducted it: ${formatDate(prem.date, 'en')}, ${placeById[prem.placeId]?.city.en}.` : '',
+        de: prem ? `Zum ersten Mal unter ihm: ${formatDate(prem.date, 'de')}, ${placeById[prem.placeId]?.city.de}.` : '',
+        cs: prem ? `Poprvé pod ním: ${formatDate(prem.date, 'cs')}, ${placeById[prem.placeId]?.city.cs}.` : '',
+      };
+  return {
+    text,
+    extra,
+    eventIds: complete.map((n) => n.id),
+    unknown: false,
+    inferred: false,
+  };
+}
+
+function answerBelgium(): QueryAnswer {
+  const nights = belgiumComplete();
+  return {
+    text: {
+      nl: `België: precies twee complete avonden. ${listNights(nights, 'nl')} (Tweede in Luik; Vijfde in Antwerpen). Geen Brussel.`,
+      en: `Belgium: exactly two complete nights. ${listNights(nights, 'en')} (Second in Liège; Fifth in Antwerp). No Brussels.`,
+      de: `Belgien: genau zwei vollständige Abende. ${listNights(nights, 'de')} (Zweite in Lüttich; Fünfte in Antwerpen). Kein Brüssel.`,
+      cs: `Belgie: přesně dva úplné večery. ${listNights(nights, 'cs')} (Druhá v Lutychu; Pátá v Antverpách). Žádný Brusel.`,
+    },
+    extra: {
+      nl: 'Fragmenten tellen niet. Bron: Mahler Foundation / Martner–Banks (mahlercat).',
+      en: 'Fragments are not counted. Source: Mahler Foundation / Martner–Banks (mahlercat).',
+      de: 'Fragmente zählen nicht. Quelle: Mahler Foundation / Martner–Banks (mahlercat).',
+      cs: 'Fragmenty se nepočítají. Zdroj: Mahler Foundation / Martner–Banks (mahlercat).',
+    },
+    eventIds: nights.map((n) => n.id),
+    unknown: false,
+    inferred: false,
+  };
+}
+
+function answerNewYork(): QueryAnswer {
+  const all = nightsInCity('New York').filter((n) => n.completeness === 'complete');
+  const y1908 = selfStats.newYork[1908];
+  const y1909 = selfStats.newYork[1909];
+  const y1911 = selfStats.newYork[1911];
+  return {
+    text: {
+      nl: `New York onder hem: ${all.length} complete avonden. 1908 de Tweede (${y1908.length}, New York Symphony); 1909 de Eerste (${y1909.length} avonden); 1911 de Vierde (${y1911.length} avonden). Geen Zevende.`,
+      en: `New York under him: ${all.length} complete nights. 1908 the Second (${y1908.length}, New York Symphony); 1909 the First (${y1909.length} nights); 1911 the Fourth (${y1911.length} nights). No Seventh.`,
+      de: `New York unter ihm: ${all.length} vollständige Abende. 1908 die Zweite (${y1908.length}, New York Symphony); 1909 die Erste (${y1909.length} Abende); 1911 die Vierte (${y1911.length} Abende). Keine Siebte.`,
+      cs: `New York pod ním: ${all.length} úplných večerů. 1908 Druhá (${y1908.length}, New York Symphony); 1909 První (${y1909.length} večery); 1911 Čtvrtá (${y1911.length} večery). Žádná Sedmá.`,
+    },
+    extra: {
+      nl: 'Geen zaal in de bronlijst. Stadspin.',
+      en: 'No hall in the source list. City pin.',
+      de: 'Kein Saal in der Quellenliste. Stadtpin.',
+      cs: 'Ve zdrojovém seznamu není sál. Pin města.',
+    },
+    eventIds: all.map((n) => n.id),
+    unknown: false,
+    inferred: false,
+  };
 }
 
 function premiereOf(workId: WorkId): AtlasEvent | undefined {
@@ -129,6 +312,27 @@ export function answerQuery(raw: string, locale: Locale, opts?: { deep?: boolean
       unknown: d.eventIds.length === 0,
       inferred: d.inferred,
     };
+  }
+
+  if (wantsBelgium(q) && !wantsHouse(q)) {
+    return answerBelgium();
+  }
+
+  if (worksFound.length && (worksFound[0] === '9' || worksFound[0] === 'lied' || worksFound[0] === '10')) {
+    return answerNever(worksFound[0], locale);
+  }
+
+  if (worksFound.length && isSelfWork(worksFound[0]) && (wantsCount(q) || wantsSelf(q))) {
+    return answerSelfCount(worksFound[0], locale);
+  }
+
+  const asksNy = placesFound.includes('new_york') || /\bnew york|nieuw-york|nieuw york\b/.test(norm(q));
+  if (asksNy && !wantsHouse(q) && (wantsCount(q) || wantsSelf(q) || worksFound.length > 0 || /^[\s\w.-]{0,24}$/.test(q))) {
+    return answerNewYork();
+  }
+
+  if (worksFound.length && isSelfWork(worksFound[0]) && (wantsCount(q) || wantsSelf(q) || /\b(vaak|often|many|keer)\b/i.test(q))) {
+    return answerSelfCount(worksFound[0], locale);
   }
 
   if (worksFound.length && (/\b(premiere|première|premiéra|premiére|eerst|first|erst|poprvé|poprve|wanneer|when|wann|kdy)\b/i.test(q) || wantsWhere(q) || q.length < 40)) {
@@ -197,21 +401,11 @@ export function answerQuery(raw: string, locale: Locale, opts?: { deep?: boolean
   }
 
   if (worksFound.length) {
-    const list = allEvents.filter((e) => e.workId === worksFound[0] && e.type !== 'life').slice(0, 4);
-    const prem = premiereOf(worksFound[0]);
-    if (prem) {
-      return {
-        text: prem.summary,
-        extra: {
-          nl: `In deze dataset ${list.length} gedocumenteerde rijen. Geen complete Martner.`,
-          en: `${list.length} documented rows in this dataset. Not a complete Martner.`,
-          de: `${list.length} belegte Zeilen in diesem Datensatz. Kein vollständiger Martner.`,
-          cs: `${list.length} doložených řádků v těchto datech. Ne úplný Martner.`,
-        },
-        eventIds: list.map((e) => e.id),
-        unknown: false,
-        inferred: false,
-      };
+    if (worksFound[0] === '9' || worksFound[0] === 'lied' || worksFound[0] === '10') {
+      return answerNever(worksFound[0], locale);
+    }
+    if (isSelfWork(worksFound[0])) {
+      return answerSelfCount(worksFound[0], locale);
     }
   }
 

@@ -8,7 +8,7 @@ import { SymphoniesView } from './components/SymphoniesView';
 import { Timeline } from './components/Timeline';
 import { allEvents } from './data';
 import { isoToSlider, sliderToIso } from './lib/dates';
-import { eventsOnDate, locateOnDate } from './lib/locate';
+import { eventsOnDate, locateOnDate, nearestAmong } from './lib/locate';
 import type { AtlasEvent, Locale } from './types';
 
 export type View = 'atlas' | 'houses' | 'symphonies';
@@ -23,6 +23,7 @@ export function App() {
   const [season, setSeason] = useState<SeasonFilter>('both');
   const [showTrip, setShowTrip] = useState(false);
   const [deep, setDeep] = useState(false);
+  const [selfOnly, setSelfOnly] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [focusId, setFocusId] = useState<string | null>('prem-7-1908');
   const [focusEvent, setFocusEvent] = useState<AtlasEvent | null>(null);
@@ -33,9 +34,10 @@ export function App() {
     return allEvents.filter((e) => {
       if (!deep && e.deep) return false;
       if (season !== 'both' && e.season && e.season !== season) return false;
+      if (selfOnly && !e.selfConducted) return false;
       return true;
     });
-  }, [deep, season]);
+  }, [deep, season, selfOnly]);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -49,12 +51,19 @@ export function App() {
       setFocusId(onDate[0].id);
       return;
     }
+    if (selfOnly) {
+      const near = nearestAmong(iso, visible);
+      setFocusEvent(near?.event ?? null);
+      setFocusId(near?.event?.id ?? null);
+      return;
+    }
     const hit = locateOnDate(iso, { deep });
     setFocusEvent(hit.event ?? null);
     setFocusId(hit.event?.id ?? null);
-  }, [iso, deep, visible]);
+  }, [iso, deep, visible, selfOnly]);
 
   function jumpToEvent(event: AtlasEvent) {
+    if (!event.selfConducted) setSelfOnly(false);
     setView('atlas');
     setYearFrac(isoToSlider(event.dateStart));
     setFocusId(event.id);
@@ -73,9 +82,11 @@ export function App() {
             showTrip={showTrip}
             season={season}
             deep={deep}
+            selfOnly={selfOnly}
             onSeason={setSeason}
             onTrip={setShowTrip}
             onDeep={setDeep}
+            onSelfOnly={setSelfOnly}
             onSelect={(e) => {
               setFocusId(e.id);
               setFocusEvent(e);
@@ -84,7 +95,9 @@ export function App() {
           />
         )}
         {view === 'houses' && <AffiliationsView locale={locale} onJump={jumpToEvent} />}
-        {view === 'symphonies' && <SymphoniesView locale={locale} onJump={jumpToEvent} />}
+        {view === 'symphonies' && (
+          <SymphoniesView locale={locale} onJump={jumpToEvent} selfOnly={selfOnly} onSelfOnly={setSelfOnly} />
+        )}
         {view === 'atlas' && focusEvent && (
           <EventSheet
             locale={locale}
@@ -113,7 +126,18 @@ export function App() {
         )}
       </div>
       {view === 'atlas' && (
-        <Timeline locale={locale} yearFrac={yearFrac} iso={iso} onChange={setYearFrac} />
+        <Timeline
+            locale={locale}
+            yearFrac={yearFrac}
+            iso={iso}
+            onChange={setYearFrac}
+            ticks={selfOnly ? visible : []}
+            onTick={(e) => {
+              setFocusId(e.id);
+              setFocusEvent(e);
+              setYearFrac(isoToSlider(e.dateStart));
+            }}
+          />
       )}
     </div>
   );

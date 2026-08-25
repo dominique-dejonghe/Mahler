@@ -1,15 +1,34 @@
 import { DivIcon } from 'leaflet';
 import { useEffect, useMemo } from 'react';
-import { MapContainer, Marker, Polyline, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, Polygon, Polyline, TileLayer, useMap } from 'react-leaflet';
 import type { SeasonFilter } from '../App';
 import { coordsFor, eventPlace, placeById, trip2026 } from '../data';
 import { t } from '../lib/i18n';
 import type { AtlasEvent, Locale } from '../types';
 
-function pinIcon(type: AtlasEvent['type'], active: boolean) {
+/** Rough country outline for a slight highlight — not a concert pin. */
+const BELGIUM_OUTLINE: [number, number][] = [
+  [51.51, 2.55],
+  [51.51, 5.91],
+  [50.76, 6.4],
+  [49.5, 5.82],
+  [49.55, 4.85],
+  [50.13, 4.15],
+  [51.09, 2.54],
+];
+
+function pinIcon(event: AtlasEvent, active: boolean) {
+  const extras = [
+    event.type,
+    event.completeness === 'fragment' ? 'fragment' : '',
+    event.belgium ? 'belgium' : '',
+    active ? 'active' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
   return new DivIcon({
     className: '',
-    html: `<div class="pin ${type}${active ? ' active' : ''}"></div>`,
+    html: `<div class="pin ${extras}"></div>`,
     iconSize: [16, 16],
     iconAnchor: [8, 8],
   });
@@ -37,9 +56,11 @@ export function MapPane({
   showTrip,
   season,
   deep,
+  selfOnly,
   onSeason,
   onTrip,
   onDeep,
+  onSelfOnly,
   onSelect,
 }: {
   locale: Locale;
@@ -48,9 +69,11 @@ export function MapPane({
   showTrip: boolean;
   season: SeasonFilter;
   deep: boolean;
+  selfOnly: boolean;
   onSeason: (s: SeasonFilter) => void;
   onTrip: (v: boolean) => void;
   onDeep: (v: boolean) => void;
+  onSelfOnly: (v: boolean) => void;
   onSelect: (e: AtlasEvent) => void;
 }) {
   const markers = useMemo(() => {
@@ -88,6 +111,9 @@ export function MapPane({
         <button className={`chip${deep ? ' on' : ''}`} type="button" onClick={() => onDeep(!deep)}>
           {t('deeper', locale)}
         </button>
+        <button className={`chip${selfOnly ? ' on' : ''}`} type="button" onClick={() => onSelfOnly(!selfOnly)}>
+          {t('selfOnPodium', locale)}
+        </button>
       </div>
       <div className="map-root">
         <MapContainer center={[49.2, 12.8]} zoom={4} minZoom={3} maxZoom={12} scrollWheelZoom>
@@ -101,7 +127,7 @@ export function MapPane({
               <Marker
                 key={event.id}
                 position={[lat, lng]}
-                icon={pinIcon(event.type, event.id === focusId)}
+                icon={pinIcon(event, event.id === focusId)}
                 eventHandlers={{ click: () => onSelect(event) }}
                 title={place ? `${place.city[locale]} — ${event.title[locale]}` : event.title[locale]}
               />
@@ -121,6 +147,12 @@ export function MapPane({
               );
             })}
           {showTrip && <Polyline positions={tripLine} pathOptions={{ color: '#e8d6b8', weight: 1.4, opacity: 0.7, dashArray: '4 7' }} />}
+          {selfOnly && (
+            <Polygon
+              positions={BELGIUM_OUTLINE}
+              pathOptions={{ color: '#c4a35a', weight: 1, opacity: 0.45, fillColor: '#c4a35a', fillOpacity: 0.08 }}
+            />
+          )}
           {focusCoords && <FlyTo lat={focusCoords.lat} lng={focusCoords.lng} />}
         </MapContainer>
       </div>
