@@ -117,11 +117,12 @@ button { cursor: pointer; }
   border-color: var(--gold);
 }
 
-.stage { flex: 1; position: relative; min-height: 0; }
+.stage { flex: 1; position: relative; min-height: 0; isolation: isolate; }
 
 .map-root {
   position: absolute;
   inset: 0;
+  z-index: 1;
 }
 .map-root .leaflet-container {
   height: 100%;
@@ -165,7 +166,7 @@ button { cursor: pointer; }
   left: 10px;
   right: 10px;
   top: 10px;
-  z-index: 12;
+  z-index: 25;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -208,11 +209,11 @@ button { cursor: pointer; }
   position: absolute;
   left: 10px;
   right: 10px;
-  bottom: calc(var(--timeline-h) + 8px);
+  bottom: 8px;
   max-height: 46%;
   overflow: auto;
   padding: 14px 16px 16px;
-  z-index: 16;
+  z-index: 26;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
 }
 .sheet h2 { margin: 0 0 6px; font-size: 1.45rem; color: var(--gold-bright); }
@@ -230,8 +231,9 @@ button { cursor: pointer; }
 .chat-fab {
   position: absolute;
   right: 14px;
-  bottom: calc(var(--timeline-h) + 14px);
-  z-index: 17;
+  top: 86px;
+  bottom: auto;
+  z-index: 28;
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -250,7 +252,7 @@ button { cursor: pointer; }
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 30;
+  z-index: 40;
   height: min(72dvh, 560px);
   display: flex;
   flex-direction: column;
@@ -347,7 +349,7 @@ button { cursor: pointer; }
     left: auto;
     width: 380px;
     right: 16px;
-    bottom: calc(var(--timeline-h) + 16px);
+    bottom: 16px;
     max-height: calc(100% - var(--timeline-h) - 32px);
   }
   .layers { right: auto; max-width: 520px; }

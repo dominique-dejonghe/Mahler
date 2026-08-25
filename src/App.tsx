@@ -59,7 +59,6 @@ export function App() {
     setYearFrac(isoToSlider(event.dateStart));
     setFocusId(event.id);
     setFocusEvent(event);
-    setChatOpen(false);
   }
 
   return (
