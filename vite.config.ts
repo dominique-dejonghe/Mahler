@@ -1,21 +1,16 @@
 import { defineConfig } from 'vite';
-import pages from '@hono/vite-cloudflare-pages';
-import devServer from '@hono/vite-dev-server';
+import react from '@vitejs/plugin-react';
 import path from 'node:path';
 
 export default defineConfig({
+  plugins: [react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
-  plugins: [
-    pages(),
-    devServer({
-      entry: 'src/index.tsx',
-    }),
-  ],
-  build: {
-    outDir: 'dist',
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
   },
 });
