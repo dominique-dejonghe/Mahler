@@ -34,6 +34,14 @@ export function ChatDock({
     localStorage.setItem(STORAGE, JSON.stringify(msgs));
   }, [msgs]);
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
   function ask(text: string) {
     const q = text.trim();
     if (!q) return;

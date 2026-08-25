@@ -17,6 +17,7 @@ export function MahlerAvatar({
       className={`mahler-avatar${className ? ` ${className}` : ''}`}
       src={MAHLER_PORTRAIT_SRC}
       alt="Gustav Mahler"
+      title="Gustav Mahler, Wenen 1907. Foto: Moritz Nähr. Wikimedia Commons, public domain."
       width={size}
       height={size}
       draggable={false}

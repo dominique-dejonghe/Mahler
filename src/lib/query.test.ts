@@ -155,6 +155,14 @@ describe('Gustaaf retrieval', () => {
     expect(tenth.text.nl.toLowerCase()).toMatch(/onvoltooid|nooit/);
   });
 
+  it('does not answer about the chat panel being open or closed', () => {
+    for (const q of ['sluit de chat', 'is de chat open', 'close the chat', 'De chat is open']) {
+      const ans = answerQuery(q, 'nl');
+      const blob = `${ans.text.nl} ${ans.extra?.nl ?? ''}`.toLowerCase();
+      expect(blob).not.toMatch(/de chat is open|moet ik hem ook kunnen sluiten/);
+    }
+  });
+
   it('keeps Alma behind the deeper flag by default', () => {
     const open = answerQuery('Waar was Mahler op 9 maart 1902?', 'nl', { deep: false });
     expect(open.eventIds.includes('deep-alma-1902')).toBe(false);
