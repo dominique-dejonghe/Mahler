@@ -254,24 +254,43 @@ button { cursor: pointer; }
 .meta { font-size: 0.82rem; color: var(--paper-dim); }
 .source a { color: var(--gold); }
 
-.chat-fab {
+.mahler-avatar {
+  display: block;
+  object-fit: cover;
+  object-position: 50% 18%;
+  border-radius: 50%;
+}
+.chat-launch {
   position: absolute;
   right: 14px;
-  top: 86px;
-  bottom: auto;
-  z-index: 28;
-  width: 56px;
-  height: 56px;
+  bottom: 14px;
+  z-index: 29;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 2px solid var(--gold);
   border-radius: 50%;
-  border: 1px solid var(--gold);
-  background: radial-gradient(circle at 30% 30%, #3a2a18, var(--ink));
-  color: var(--gold-bright);
-  font-family: "Cormorant Garamond", serif;
-  font-size: 1.35rem;
-  letter-spacing: 0.04em;
+  background: #1a1410;
+  overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
-.chat-fab.open { background: var(--gold); color: var(--ink); }
+.chat-launch .mahler-avatar {
+  width: 64px;
+  height: 64px;
+}
+@keyframes mahler-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(196, 163, 90, 0.4), 0 0 10px rgba(228, 195, 106, 0.22); }
+  50% { box-shadow: 0 0 0 3px var(--gold-bright), 0 0 20px rgba(228, 195, 106, 0.62); }
+}
+.chat-launch.pulse {
+  animation: mahler-pulse 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chat-launch.pulse {
+    animation: none;
+    box-shadow: 0 0 0 2px var(--gold), 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+}
 
 .chat-dock {
   position: absolute;
@@ -291,10 +310,40 @@ button { cursor: pointer; }
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
   padding: 12px 14px;
   border-bottom: 1px solid var(--line);
 }
+.chat-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.chat-head-face {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--gold);
+}
 .chat-head h2 { margin: 0; font-size: 1.4rem; color: var(--gold-bright); }
+.chat-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  border: 1px solid var(--gold);
+  background: rgba(196, 163, 90, 0.08);
+  color: var(--gold-bright);
+  padding: 6px 10px 6px 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+.chat-close span[aria-hidden] {
+  font-size: 1.4rem;
+  line-height: 0.7;
+}
 .messages {
   flex: 1;
   overflow: auto;
@@ -420,6 +469,9 @@ button { cursor: pointer; }
     right: 16px;
     bottom: 16px;
     max-height: calc(100% - var(--timeline-h) - 32px);
+  }
+  .stage:not(.chat-open) .sheet {
+    right: 90px;
   }
   .layers { right: auto; max-width: 520px; }
 }

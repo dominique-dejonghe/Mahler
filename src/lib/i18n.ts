@@ -105,6 +105,12 @@ export const ui = {
     cs: 'Cesta 22. srp.–7. zář. 2026. Města v pořadí. Žádné hotely nejsou vymyšlené.',
   },
   close: { nl: 'Sluit', en: 'Close', de: 'Schließen', cs: 'Zavřít' },
+  openChat: {
+    nl: 'Open Gustaaf',
+    en: 'Open Gustaaf',
+    de: 'Gustaaf öffnen',
+    cs: 'Otevřít Gustaafa',
+  },
   year: { nl: 'Jaar', en: 'Year', de: 'Jahr', cs: 'Rok' },
   examples: {
     nl: ['Hoe vaak de 6e', 'België', 'New York', '19 september 1908'],

@@ -20,12 +20,14 @@ npm test      # retrieval + data-integrity tests
 npm run build
 ```
 
-No environment variables. Chat and locale persist in `localStorage`.
+No environment variables. Chat transcript, chat open/closed, and locale persist in `localStorage`.
+
+Avatar: `public/images/mahler-naehr-1907.jpg` — Gustav Mahler, Vienna 1907, photograph by Moritz Nähr. [Wikimedia Commons, File:Photo of Gustav Mahler by Moritz Nähr 02.jpg](https://commons.wikimedia.org/wiki/File:Photo_of_Gustav_Mahler_by_Moritz_N%C3%A4hr_02.jpg). Public domain (Nähr d. 1945; published 1908).
 
 ## What it does
 
 1. **Atlas** — Leaflet map (Europe + New York) and a year slider 1860–1921. Drag the year; Mahler moves to the best documented pin. Click a city or date. Types: childhood, conducting posts, guest nights, summer huts, death, grave, premieres, performances.
-2. **Gustaaf** — persistent chat. Structured JSON first. If the day has no exact pin, it says so and offers the nearest documented residence or post. It does not invent streets.
+2. **Gustaaf** — retrieval chat. Closable right-hand panel; a pulsing 1907 Moritz Nähr photograph of Mahler (Wikimedia Commons, public domain) reopens it. Structured JSON first. If the day has no exact pin, it says so and offers the nearest documented residence or post. It does not invent streets.
 3. **Huizen** — opera houses and orchestras (Bad Hall → New York), Kapellmeister vs director vs guest, years, source.
 4. **Symfonieën** — nights Mahler himself conducted 1–8, plus premieres of 9, Das Lied, and the unfinished 10th (Schalk 1924 + Cooke 1964, marked posthumous). A finite 1911–1921 set (Walter, Mengelberg, Stokowski) sits under that. Every row has `source`.
 

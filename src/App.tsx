@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { AffiliationsView } from './components/AffiliationsView';
 import { ChatDock } from './components/ChatDock';
 import { EventSheet } from './components/EventSheet';
+import { MahlerAvatar } from './components/MahlerAvatar';
 import { Header } from './components/Header';
 import { MapPane } from './components/MapPane';
 import { SymphoniesView } from './components/SymphoniesView';
 import { Timeline } from './components/Timeline';
 import { allEvents } from './data';
 import { isoToSlider, sliderToIso } from './lib/dates';
+import { t } from './lib/i18n';
 import { eventsOnDate, locateOnDate, nearestAmong } from './lib/locate';
 import type { AtlasEvent, Locale } from './types';
 
@@ -24,7 +26,7 @@ export function App() {
   const [showTrip, setShowTrip] = useState(false);
   const [deep, setDeep] = useState(false);
   const [selfOnly, setSelfOnly] = useState(false);
-  const [chatOpen, setChatOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(() => readChatOpen());
   const [focusId, setFocusId] = useState<string | null>('prem-7-1908');
   const [focusEvent, setFocusEvent] = useState<AtlasEvent | null>(null);
 
@@ -43,6 +45,10 @@ export function App() {
     document.documentElement.lang = locale;
     localStorage.setItem('gustaaf-locale', locale);
   }, [locale]);
+
+  useEffect(() => {
+    localStorage.setItem('gustaaf-chat-open', chatOpen ? '1' : '0');
+  }, [chatOpen]);
 
   useEffect(() => {
     const onDate = eventsOnDate(iso, { deep }).filter((e) => visible.includes(e));
@@ -73,7 +79,7 @@ export function App() {
   return (
     <div className="app">
       <Header locale={locale} onLocale={setLocale} view={view} onView={setView} />
-      <div className="stage">
+      <div className={`stage${chatOpen ? ' chat-open' : ''}`}>
         {view === 'atlas' && (
           <MapPane
             locale={locale}
@@ -106,14 +112,14 @@ export function App() {
             onClose={() => setFocusEvent(null)}
           />
         )}
-        {view === 'atlas' && (
+        {!chatOpen && (
           <button
-            className={`chat-fab${chatOpen ? ' open' : ''}`}
+            className="chat-launch pulse"
             type="button"
-            onClick={() => setChatOpen((v) => !v)}
-            aria-label="Gustaaf"
+            onClick={() => setChatOpen(true)}
+            aria-label={t('openChat', locale)}
           >
-            G
+            <MahlerAvatar size={64} />
           </button>
         )}
         {chatOpen && (
@@ -147,4 +153,11 @@ function readLocale(): Locale {
   const stored = localStorage.getItem('gustaaf-locale');
   if (stored === 'en' || stored === 'de' || stored === 'cs' || stored === 'nl') return stored;
   return 'nl';
+}
+
+function readChatOpen(): boolean {
+  const stored = localStorage.getItem('gustaaf-chat-open');
+  if (stored === '1' || stored === 'true') return true;
+  if (stored === '0' || stored === 'false') return false;
+  return false;
 }

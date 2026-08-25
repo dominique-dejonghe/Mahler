@@ -3,6 +3,7 @@ import { allEvents } from '../data';
 import { t, ui } from '../lib/i18n';
 import { answerQuery } from '../lib/query';
 import type { AtlasEvent, Locale } from '../types';
+import { MahlerAvatar } from './MahlerAvatar';
 
 interface Msg {
   role: 'user' | 'bot';
@@ -50,11 +51,15 @@ export function ChatDock({
   return (
     <section className="chat-dock" aria-label="Gustaaf">
       <div className="chat-head">
-        <div>
-          <h2>{t('chatTitle', locale)}</h2>
-          <p className="meta">{t('chatHint', locale)}</p>
+        <div className="chat-brand">
+          <MahlerAvatar size={44} className="chat-head-face" />
+          <div>
+            <h2>{t('chatTitle', locale)}</h2>
+            <p className="meta">{t('chatHint', locale)}</p>
+          </div>
         </div>
-        <button className="chip" type="button" onClick={onClose}>
+        <button className="chat-close" type="button" onClick={onClose} aria-label={t('close', locale)}>
+          <span aria-hidden="true">×</span>
           {t('close', locale)}
         </button>
       </div>
