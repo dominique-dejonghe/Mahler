@@ -45,10 +45,10 @@ export function SymphoniesView({
             </p>
             <div className="catalog-links">
               <a className="chip" href={w.listen.url} target="_blank" rel="noopener noreferrer" aria-label={`${t('listen', locale)} · ${w.title[locale]}`}>
-                {w.listen.label}
+                {t('spotifyAll', locale)}
               </a>
               <a className="chip" href={w.watch.url} target="_blank" rel="noopener noreferrer" aria-label={`${t('watch', locale)} · ${w.title[locale]}`}>
-                {w.watch.label}
+                {t('youtubeAll', locale)}
               </a>
             </div>
           </div>
