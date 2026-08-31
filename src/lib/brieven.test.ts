@@ -189,7 +189,7 @@ describe('/brieven path', () => {
     expect(viewFromPath('/brieven')).toBe('letters');
     expect(viewFromPath('/brieven/')).toBe('letters');
     expect(viewFromPath('/')).toBe('atlas');
-    expect(pathFromView('letters')).toBe('/brieven');
+    expect(pathFromView('letters')).toBe('/brieven/');
     expect(pathFromView('atlas')).toBe('/');
     expect(pathFromView('houses')).toBe('/');
   });

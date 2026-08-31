@@ -7,5 +7,5 @@ export function viewFromPath(pathname: string): View {
 }
 
 export function pathFromView(view: View): string {
-  return view === 'letters' ? '/brieven' : '/';
+  return view === 'letters' ? '/brieven/' : '/';
 }
