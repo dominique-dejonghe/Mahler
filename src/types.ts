@@ -124,8 +124,8 @@ export interface QueryAnswer {
 export interface Correspondent {
   id: string;
   name: string;
-  periodFrom: string;
-  periodTo: string;
+  periodFrom: string | number;
+  periodTo: string | number;
   whyNl: string;
   tags?: string[];
 }
@@ -148,6 +148,6 @@ export interface Brief {
 export interface Bron {
   id: string;
   labelNl: string;
-  year?: number;
+  year?: number | null;
   noteNl: string;
 }

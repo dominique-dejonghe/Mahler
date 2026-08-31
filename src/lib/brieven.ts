@@ -36,11 +36,13 @@ export function formatLetterDate(date: string, locale: string): string {
 
 export function filterCorrespondenten(
   rows: Correspondent[],
-  q: { text?: string; tag?: string },
+  q: { text?: string; tag?: string; id?: string },
 ): Correspondent[] {
   const text = q.text?.trim().toLowerCase() ?? '';
   const tag = q.tag?.trim().toLowerCase() ?? '';
+  const id = q.id?.trim() ?? '';
   return rows.filter((row) => {
+    if (id && row.id !== id) return false;
     if (tag && !(row.tags ?? []).some((t) => t.toLowerCase() === tag)) return false;
     if (!text) return true;
     const hay = `${row.name} ${row.whyNl} ${(row.tags ?? []).join(' ')}`.toLowerCase();
@@ -48,17 +50,26 @@ export function filterCorrespondenten(
   });
 }
 
+export function sortBrieven(rows: Brief[]): Brief[] {
+  return [...rows].sort((a, b) => a.date.localeCompare(b.date));
+}
+
 export function filterBrieven(
   rows: Brief[],
-  q: { correspondentId?: string; year?: string; place?: string },
+  q: { correspondentId?: string; year?: string; tag?: string },
+  people: Correspondent[] = [],
 ): Brief[] {
   const correspondentId = q.correspondentId?.trim() ?? '';
   const year = q.year?.trim() ?? '';
-  const place = q.place?.trim().toLowerCase() ?? '';
+  const tag = q.tag?.trim().toLowerCase() ?? '';
+  const byId = Object.fromEntries(people.map((p) => [p.id, p]));
   return rows.filter((row) => {
     if (correspondentId && row.correspondentId !== correspondentId) return false;
     if (year && yearOf(row.date) !== year) return false;
-    if (place && row.place.toLowerCase() !== place) return false;
+    if (tag) {
+      const person = byId[row.correspondentId];
+      if (!(person?.tags ?? []).some((item) => item.toLowerCase() === tag)) return false;
+    }
     return true;
   });
 }
@@ -96,8 +107,8 @@ export function validateCorrespondenten(data: unknown): string[] {
     else if (seen.has(r.id)) errors.push(`${at}.id duplicate: ${r.id}`);
     else seen.add(r.id);
     if (!r.name?.trim()) errors.push(`${at}.name required`);
-    if (!r.periodFrom?.trim()) errors.push(`${at}.periodFrom required`);
-    if (!r.periodTo?.trim()) errors.push(`${at}.periodTo required`);
+    if (!hasPeriod(r.periodFrom)) errors.push(`${at}.periodFrom required`);
+    if (!hasPeriod(r.periodTo)) errors.push(`${at}.periodTo required`);
     if (!r.whyNl?.trim()) errors.push(`${at}.whyNl required`);
   }
   return errors;
@@ -155,7 +166,12 @@ export function validateBronnen(data: unknown): string[] {
     else seen.add(r.id);
     if (!r.labelNl?.trim()) errors.push(`${at}.labelNl required`);
     if (!r.noteNl?.trim()) errors.push(`${at}.noteNl required`);
-    if (r.year != null && !Number.isInteger(r.year)) errors.push(`${at}.year must be an integer`);
+    if (r.year != null && !Number.isInteger(r.year)) errors.push(`${at}.year must be an integer or null`);
   }
   return errors;
+}
+
+function hasPeriod(value: unknown): boolean {
+  if (typeof value === 'number') return Number.isInteger(value);
+  return typeof value === 'string' && value.trim().length > 0;
 }

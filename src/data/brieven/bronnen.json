@@ -1,31 +1,62 @@
 [
   {
-    "id": "alma-1924",
-    "labelNl": "Alma Mahler (red.), Gustav Mahler: Briefe 1879–1911 (Paul Zsolnay, Wenen 1924)",
-    "year": 1924,
-    "noteNl": "Vroege, zwaar gecensureerde briefeditie. Onbetrouwbaar als enige bron: weglatingen, herschrijvingen en selectie door Alma. Geen briefteksten hier."
-  },
-  {
-    "id": "blaukopf-1982",
-    "labelNl": "Herta Blaukopf (red.), Gustav Mahler Briefe (Paul Zsolnay, 1982; vermeerderd 1996)",
-    "year": 1982,
-    "noteNl": "Standaardeditie van brieven van Mahler. Moderne tekstuitgave; auteursrecht op editie en apparaat. Geen volledige teksten in deze gids."
-  },
-  {
-    "id": "beaumont-alma",
-    "labelNl": "Henry-Louis de La Grange, Günther Weiß & Knud Martner; Engelse uitgave Antony Beaumont, Gustav Mahler: Letters to his Wife",
-    "year": 2004,
-    "noteNl": "Kritische editie van brieven van Mahler aan Alma. Bibliografische verwijzing; geen briefteksten hier."
-  },
-  {
-    "id": "strauss-briefwechsel",
-    "labelNl": "Herta Blaukopf (red.), Gustav Mahler – Richard Strauss: Briefwechsel",
-    "year": 1980,
-    "noteNl": "Correspondentie Mahler–Strauss. Alleen de editie, geen briefteksten in deze gids."
-  },
-  {
     "id": "mahler-online",
-    "labelNl": "Mahler-Online, brievenindex",
-    "noteNl": "Wetenschappelijke metadata-index (3000+ records), geen volledige briefteksten. https://www.mahler-online.at/letters_table.html"
+    "labelNl": "Mahler-Online (OeAW / IGMS)",
+    "year": 2025,
+    "noteNl": "Index van 2636 gedrukte brieven (waarvan 2459 van Mahler). Metadata plus incipit, geen volledige tekst. Geteld 31 aug 2026."
+  },
+  {
+    "id": "blaukopf-1996",
+    "labelNl": "Herta Blaukopf (red.), Gustav Mahler. Briefe",
+    "year": 1996,
+    "noteNl": "Zsolnay, Wenen. Herziene uitgave van 1982. Standaard-eenbandselectie, niet compleet."
+  },
+  {
+    "id": "alma-1924",
+    "labelNl": "Alma Mahler (red.), Gustav Mahler. Briefe 1879-1911",
+    "year": 1924,
+    "noteNl": "Eerste bundel. Gecensureerd: Alma sneed, herschreef en dateerde naar eigen inzicht."
+  },
+  {
+    "id": "beaumont-2004",
+    "labelNl": "De La Grange / Weiss / Beaumont, Letters to his Wife",
+    "year": 2004,
+    "noteNl": "Volledige brieven aan Alma. Duitse basis: Ein Glück ohne Ruh (1995). Ongeveer dubbel Alma 1940."
+  },
+  {
+    "id": "willnauer-2006",
+    "labelNl": "Franz Willnauer (red.), Mein lieber Trotzkopf, meine süße Mohnblume",
+    "year": 2006,
+    "noteNl": "Zsolnay. Circa 225 brieven, vooral van Mahler aan Anna von Mildenburg (1895-1907)."
+  },
+  {
+    "id": "mcclatchie-2006",
+    "labelNl": "Stephen McClatchie (red.), The Mahler Family Letters / Liebste Justi!",
+    "year": 2006,
+    "noteNl": "568 familiebrieven, kern Justine. Collectie Maria Rosé, University of Western Ontario (1983)."
+  },
+  {
+    "id": "strauss-1980",
+    "labelNl": "Herta Blaukopf (red.), Mahler-Strauss Briefwechsel 1888-1911",
+    "year": 1980,
+    "noteNl": "De twee componisten als collega's, rivalen en bondgenoten."
+  },
+  {
+    "id": "unbekannte-1983",
+    "labelNl": "Herta Blaukopf (red.), Gustav Mahlers unbekannte Briefe",
+    "year": 1983,
+    "noteNl": "Aanvulling op de Briefe van 1982. Engels: Mahlers Unknown Letters (Stokes, 1986)."
+  },
+  {
+    "id": "reeser-1980",
+    "labelNl": "Eduard Reeser (red.), Gustav Mahler und Holland. Briefe",
+    "year": 1980,
+    "noteNl": "Vooral Mengelberg en het Concertgebouw."
+  },
+  {
+    "id": "toblach-pdf",
+    "labelNl": "Kulturzentrum Toblach, Briefe die Mahler in Toblach schreef",
+    "year": null,
+    "noteNl": "Gepubliceerde fragmenten (o.a. aan Bruno Walter, 1908). Geen volledige editie."
   }
 ]

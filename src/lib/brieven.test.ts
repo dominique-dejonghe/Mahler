@@ -6,7 +6,7 @@ import {
   filterCorrespondenten,
   formatLetterDate,
   hasQuote,
-  uniquePlaces,
+  sortBrieven,
   uniqueTags,
   uniqueYears,
   validateBrieven,
@@ -19,16 +19,16 @@ const samplePeople: Correspondent[] = [
   {
     id: 'alma-mahler',
     name: 'Alma Mahler',
-    periodFrom: '1901',
-    periodTo: '1911',
+    periodFrom: 1901,
+    periodTo: 1911,
     whyNl: 'Testdata, geen biografie.',
     tags: ['familie'],
   },
   {
     id: 'bruno-walter',
     name: 'Bruno Walter',
-    periodFrom: '1894',
-    periodTo: '1911',
+    periodFrom: 1894,
+    periodTo: 1911,
     whyNl: 'Testdata, geen biografie.',
     tags: ['dirigent'],
   },
@@ -42,7 +42,7 @@ const sampleLetters: Brief[] = [
     correspondentId: 'alma-mahler',
     summaryNl: 'Filtertest. Geen citaat.',
     whyNl: 'Filtertest.',
-    sourceId: 'blaukopf-1982',
+    sourceId: 'blaukopf-1996',
     quoteDE: null,
     quoteNL: '',
   },
@@ -53,28 +53,46 @@ const sampleLetters: Brief[] = [
     correspondentId: 'bruno-walter',
     summaryNl: 'Tweede filtertest.',
     whyNl: 'Filtertest.',
-    sourceId: 'blaukopf-1982',
+    sourceId: 'blaukopf-1996',
   },
 ];
 
 describe('published Brieven JSON', () => {
-  it('ships empty correspondenten and brieven', () => {
-    expect(correspondenten).toEqual([]);
-    expect(brieven).toEqual([]);
+  it('ships 25 correspondenten, 28 brieven, 10 bronnen', () => {
+    expect(correspondenten).toHaveLength(25);
+    expect(brieven).toHaveLength(28);
+    expect(bronnen).toHaveLength(10);
   });
 
-  it('accepts the empty arrays and seeded bronnen', () => {
+  it('validates live rows and cross-references', () => {
     const peopleIds = new Set(correspondenten.map((c) => c.id));
     const sourceIds = new Set(bronnen.map((b) => b.id));
     expect(validateCorrespondenten(correspondenten)).toEqual([]);
     expect(validateBronnen(bronnen)).toEqual([]);
     expect(validateBrieven(brieven, peopleIds, sourceIds)).toEqual([]);
-    expect(bronnen.length).toBeGreaterThan(0);
-    expect(bronnen.every((b) => b.id && b.labelNl && b.noteNl)).toBe(true);
   });
 
-  it('publishes no quotes', () => {
-    expect(brieven.every((row) => !hasQuote(row.quoteDE) && !hasQuote(row.quoteNL))).toBe(true);
+  it('sorts letters by ISO-ish date, month-only as that month', () => {
+    const dates = brieven.map((row) => row.date);
+    expect(dates).toEqual([...dates].sort((a, b) => a.localeCompare(b)));
+    expect(brieven[0].id).toBe('c-000025');
+    expect(brieven[brieven.length - 1].id).toBe('c-002499');
+    const strauss = brieven.find((row) => row.id === 'c-001900');
+    const hamburg = brieven.find((row) => row.id === 'c-000826');
+    expect(strauss && hamburg && strauss.date < hamburg.date).toBe(true);
+  });
+
+  it('gives every letter a Mahler-Online url', () => {
+    expect(brieven.every((row) => row.mahlerOnlineUrl?.startsWith('https://www.mahler-online.at/'))).toBe(true);
+  });
+
+  it('omits quotes on c-001876 and keeps toblach-pdf year null', () => {
+    const letter = brieven.find((row) => row.id === 'c-001876');
+    expect(letter).toBeTruthy();
+    expect(letter && 'quoteDE' in letter ? hasQuote(letter.quoteDE) : false).toBe(false);
+    expect(letter && 'quoteNL' in letter ? hasQuote(letter.quoteNL) : false).toBe(false);
+    const toblach = bronnen.find((row) => row.id === 'toblach-pdf');
+    expect(toblach?.year ?? null).toBeNull();
   });
 });
 
@@ -92,27 +110,38 @@ describe('quote gate', () => {
 });
 
 describe('filters', () => {
-  it('returns empty lists when the published data is empty', () => {
-    expect(filterCorrespondenten(correspondenten, { text: 'alma' })).toEqual([]);
-    expect(filterBrieven(brieven, { year: '1908', place: 'Praag', correspondentId: 'alma-mahler' })).toEqual([]);
-    expect(uniqueYears(brieven)).toEqual([]);
-    expect(uniquePlaces(brieven)).toEqual([]);
-    expect(uniqueTags(correspondenten)).toEqual([]);
+  it('filters published letters by correspondent, year, and correspondent tag', () => {
+    expect(filterBrieven(brieven, { correspondentId: 'alma-mahler' }, correspondenten)).toHaveLength(5);
+    expect(filterBrieven(brieven, { year: '1908' }, correspondenten).map((row) => row.id)).toEqual([
+      'c-002437',
+      'c-002444',
+      'c-002450',
+    ]);
+    expect(filterCorrespondenten(correspondenten, { tag: 'familie' }).map((c) => c.id)).toEqual([
+      'justine-mahler',
+      'alma-mahler',
+      'emil-freund',
+      'marie-bernhard-mahler',
+      'emma-mahler',
+    ]);
+    const familyLetters = filterBrieven(brieven, { tag: 'familie' }, correspondenten);
+    expect(familyLetters.every((row) => correspondenten.find((c) => c.id === row.correspondentId)?.tags?.includes('familie'))).toBe(
+      true,
+    );
+    expect(uniqueYears(brieven).length).toBeGreaterThan(0);
+    expect(uniqueTags(correspondenten)).toEqual(
+      expect.arrayContaining(['familie', 'dirigent', 'compositie', 'opera']),
+    );
   });
 
-  it('filters correspondents by text and tag (fixture only)', () => {
-    expect(filterCorrespondenten(samplePeople, { text: 'bruno' }).map((c) => c.id)).toEqual(['bruno-walter']);
+  it('filters fixture rows by id, tag, year', () => {
+    expect(filterCorrespondenten(samplePeople, { id: 'bruno-walter' }).map((c) => c.id)).toEqual(['bruno-walter']);
     expect(filterCorrespondenten(samplePeople, { tag: 'familie' }).map((c) => c.id)).toEqual(['alma-mahler']);
-  });
-
-  it('filters letters by recipient, year, and place (fixture only)', () => {
-    expect(filterBrieven(sampleLetters, { correspondentId: 'alma-mahler' }).map((b) => b.id)).toEqual([
+    expect(filterBrieven(sampleLetters, { correspondentId: 'alma-mahler' }, samplePeople).map((b) => b.id)).toEqual([
       '1908-09-19-alma',
     ]);
-    expect(filterBrieven(sampleLetters, { year: '1909' }).map((b) => b.id)).toEqual(['1909-wenen-walter']);
-    expect(filterBrieven(sampleLetters, { place: 'Praag' }).map((b) => b.id)).toEqual(['1908-09-19-alma']);
-    expect(uniqueYears(sampleLetters)).toEqual(['1908', '1909']);
-    expect(uniquePlaces(sampleLetters)).toEqual(['Praag', 'Wenen']);
+    expect(filterBrieven(sampleLetters, { year: '1909' }, samplePeople).map((b) => b.id)).toEqual(['1909-wenen-walter']);
+    expect(filterBrieven(sampleLetters, { tag: 'dirigent' }, samplePeople).map((b) => b.id)).toEqual(['1909-wenen-walter']);
   });
 });
 
@@ -122,6 +151,15 @@ describe('letter dates', () => {
     expect(formatLetterDate('1908-09', 'nl')).toMatch(/1908/);
     expect(formatLetterDate('1908-09-19', 'nl')).toMatch(/19/);
   });
+
+  it('sorts month-only dates as that month', () => {
+    const mixed: Brief[] = [
+      { ...sampleLetters[0], id: 'day', date: '1907-07-08' },
+      { ...sampleLetters[0], id: 'month', date: '1907-07' },
+      { ...sampleLetters[0], id: 'before', date: '1907-06-08' },
+    ];
+    expect(sortBrieven(mixed).map((row) => row.id)).toEqual(['before', 'month', 'day']);
+  });
 });
 
 describe('validator', () => {
@@ -130,11 +168,7 @@ describe('validator', () => {
   });
 
   it('rejects a letter pointing at a missing correspondent', () => {
-    const errors = validateBrieven(
-      sampleLetters,
-      new Set(['alma-mahler']),
-      new Set(['blaukopf-1982']),
-    );
+    const errors = validateBrieven(sampleLetters, new Set(['alma-mahler']), new Set(['blaukopf-1996']));
     expect(errors.some((e) => e.includes('bruno-walter'))).toBe(true);
   });
 });

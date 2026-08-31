@@ -1,1 +1,261 @@
-[]
+[
+  {
+    "id": "justine-mahler",
+    "name": "Justine (Justi) Mahler",
+    "periodFrom": 1885,
+    "periodTo": 1910,
+    "whyNl": "Zijn zus, huisgenote en manager tot haar huwelijk met Arnold Rosé (1902). Grootste correspondentie: 445 brieven van Mahler in de index. Familie, geld, posten, gezondheid.",
+    "tags": [
+      "familie"
+    ]
+  },
+  {
+    "id": "alma-mahler",
+    "name": "Alma Mahler-Schindler",
+    "periodFrom": 1901,
+    "periodTo": 1910,
+    "whyNl": "Vrouw vanaf maart 1902. 349 brieven van Mahler in de index (historisch tot 1911; de index stopt grotendeels in 1910). De brief van 19 december 1901 (Dresden) zet de toon: een componist in huis. Alma 1924/1940 is gecensureerd; lees Beaumont.",
+    "tags": [
+      "familie",
+      "compositie"
+    ]
+  },
+  {
+    "id": "anna-von-mildenburg",
+    "name": "Anna von Mildenburg",
+    "periodFrom": 1895,
+    "periodTo": 1907,
+    "whyNl": "Wagner-sopraan, de zangeres van Hamburg en later Wenen. 227 brieven van Mahler. Mentor, minnaar, collega. Editie: Willnauer 2006.",
+    "tags": [
+      "opera",
+      "liefde"
+    ]
+  },
+  {
+    "id": "friedrich-lohr",
+    "name": "Friedrich (Fritz) Löhr",
+    "periodFrom": 1883,
+    "periodTo": 1909,
+    "whyNl": "Studievriend uit Wenen, archeoloog. 89 brieven. De vroege jaren (Olmütz, Kassel, Leipzig) staan hier beter dan bij Alma.",
+    "tags": [
+      "vriend"
+    ]
+  },
+  {
+    "id": "richard-strauss",
+    "name": "Richard Strauss",
+    "periodFrom": 1888,
+    "periodTo": 1909,
+    "whyNl": "Collega-componist/dirigent. 80 brieven van Mahler, 29 terug. Samenwerking en concurrentie. Eigen editie: Blaukopf 1980.",
+    "tags": [
+      "compositie",
+      "dirigent"
+    ]
+  },
+  {
+    "id": "henri-hinrichsen",
+    "name": "Henri Hinrichsen",
+    "periodFrom": 1903,
+    "periodTo": 1910,
+    "whyNl": "Uitgever C.F. Peters, Leipzig. 52 brieven. Vooral de Vijfde: partituur, correcties, honorarium.",
+    "tags": [
+      "uitgever"
+    ]
+  },
+  {
+    "id": "willem-mengelberg",
+    "name": "Willem Mengelberg",
+    "periodFrom": 1903,
+    "periodTo": 1910,
+    "whyNl": "Concertgebouw. 42 brieven. Amsterdam wordt zijn tweede muzikale vaderland. Later het Mahlerfeest 1920.",
+    "tags": [
+      "dirigent"
+    ]
+  },
+  {
+    "id": "bruno-walter",
+    "name": "Bruno Walter",
+    "periodFrom": 1895,
+    "periodTo": 1910,
+    "whyNl": "Leerling-kapelmeester Hamburg, daarna Wenen. 39 brieven. De Toblach-brieven van 1908: hart, levenswijze, Das Lied von der Erde. Walter dirigeert de postume premies van Das Lied (1911) en de Negende (1912).",
+    "tags": [
+      "dirigent"
+    ]
+  },
+  {
+    "id": "emil-freund",
+    "name": "Emil Freund",
+    "periodFrom": 1876,
+    "periodTo": 1910,
+    "whyNl": "Jeugdvriend uit Iglau, later advocaat. 40 brieven, van het conservatorium tot de nalatenschap. Praktisch: geld, contracten, villa.",
+    "tags": [
+      "vriend",
+      "familie"
+    ]
+  },
+  {
+    "id": "felix-weingartner",
+    "name": "Felix Weingartner",
+    "periodFrom": 1896,
+    "periodTo": 1907,
+    "whyNl": "Dirigent, zijn opvolger aan de Hofoper (1908). 39 brieven. Oktober 1907: Mahler bedankt hem als Nachfolger.",
+    "tags": [
+      "dirigent",
+      "opera"
+    ]
+  },
+  {
+    "id": "arnold-berliner",
+    "name": "Arnold Berliner",
+    "periodFrom": 1892,
+    "periodTo": 1909,
+    "whyNl": "Natuurkundige, Hamburg-vriend. 35 brieven. De Toblach-zomers gaan vaak naar hem.",
+    "tags": [
+      "vriend"
+    ]
+  },
+  {
+    "id": "emil-hertzka",
+    "name": "Emil Hertzka",
+    "periodFrom": 1909,
+    "periodTo": 1911,
+    "whyNl": "Directeur Universal Edition. 32 brieven, laat en zakelijk: Achtste, Lied, Negende, New York.",
+    "tags": [
+      "uitgever"
+    ]
+  },
+  {
+    "id": "emil-gutmann",
+    "name": "Emil Gutmann",
+    "periodFrom": 1908,
+    "periodTo": 1911,
+    "whyNl": "Impressario van de premie van de Achtste in München (12 sept. 1910). 35 brieven, tot in New York 1911.",
+    "tags": [
+      "uitgever",
+      "compositie"
+    ]
+  },
+  {
+    "id": "marie-bernhard-mahler",
+    "name": "Marie en Bernhard Mahler",
+    "periodFrom": 1884,
+    "periodTo": 1889,
+    "whyNl": "Ouders. 48 brieven, vooral voor 1889 (beiden sterven dat jaar). Daarna neemt Justine de familiemail over.",
+    "tags": [
+      "familie"
+    ]
+  },
+  {
+    "id": "hermann-behn",
+    "name": "Hermann Behn",
+    "periodFrom": 1894,
+    "periodTo": 1908,
+    "whyNl": "Hamburgse mecenas, financierde de premie van de Tweede (Berlijn 1895). 35 brieven.",
+    "tags": [
+      "vriend",
+      "compositie"
+    ]
+  },
+  {
+    "id": "max-marschalk",
+    "name": "Max Marschalk",
+    "periodFrom": 1896,
+    "periodTo": 1907,
+    "whyNl": "Criticus en componist, Berlijn. 28 brieven. Belangrijk voor hoe Mahler zijn Eerste en Tweede uitlegt.",
+    "tags": [
+      "compositie"
+    ]
+  },
+  {
+    "id": "guido-adler",
+    "name": "Guido Adler",
+    "periodFrom": 1886,
+    "periodTo": 1910,
+    "whyNl": "Musikoloog, studievriend. 26 brieven. De Weense muziekwetenschap.",
+    "tags": [
+      "vriend"
+    ]
+  },
+  {
+    "id": "arnold-schoenberg",
+    "name": "Arnold Schönberg",
+    "periodFrom": 1904,
+    "periodTo": 1910,
+    "whyNl": "14 brieven. Mahler steunt de jongere componist (Vereinigung schaffender Tonkünstler, 1904). In NY blijft hij schrijven.",
+    "tags": [
+      "compositie"
+    ]
+  },
+  {
+    "id": "alfred-roller",
+    "name": "Alfred Roller",
+    "periodFrom": 1902,
+    "periodTo": 1908,
+    "whyNl": "Secession, toneelbeeld Hofoper. 16 brieven. Samen: Tristan (1903) en de visuele hervorming van de opera.",
+    "tags": [
+      "opera"
+    ]
+  },
+  {
+    "id": "oskar-fried",
+    "name": "Oskar Fried",
+    "periodFrom": 1905,
+    "periodTo": 1910,
+    "whyNl": "Dirigent, vroege Mahler-apostel in Berlijn. 25 brieven. Gast in Toblach.",
+    "tags": [
+      "dirigent"
+    ]
+  },
+  {
+    "id": "franz-schalk",
+    "name": "Franz Schalk",
+    "periodFrom": 1898,
+    "periodTo": 1910,
+    "whyNl": "Kapelmeester Hofoper onder Mahler, later co-directeur. 25 brieven. Hij draait de avonden die Mahler niet zelf doet.",
+    "tags": [
+      "opera",
+      "dirigent"
+    ]
+  },
+  {
+    "id": "emma-mahler",
+    "name": "Emma Mahler",
+    "periodFrom": 1893,
+    "periodTo": 1907,
+    "whyNl": "Jongere zus, later getrouwd met Ernst Rosé. 19 brieven. Kleinere lijn naast Justine.",
+    "tags": [
+      "familie"
+    ]
+  },
+  {
+    "id": "selma-kurz",
+    "name": "Selma Kurz",
+    "periodFrom": 1898,
+    "periodTo": 1905,
+    "whyNl": "Sopraan Hofoper. 29 brieven. Korte affaire rond 1900, daarna professioneel.",
+    "tags": [
+      "opera"
+    ]
+  },
+  {
+    "id": "heinrich-conried",
+    "name": "Heinrich Conried",
+    "periodFrom": 1907,
+    "periodTo": 1908,
+    "whyNl": "Directeur Metropolitan Opera, New York. Contract 1907: Mahler naar de Met.",
+    "tags": [
+      "opera",
+      "new-york"
+    ]
+  },
+  {
+    "id": "georg-goehler",
+    "name": "Georg Göhler",
+    "periodFrom": 1911,
+    "periodTo": 1911,
+    "whyNl": "Dirigent en Mahler-voorvechter in Duitsland. Een late brief in deze selectie (8 feb. 1911, New York).",
+    "tags": [
+      "dirigent"
+    ]
+  }
+]

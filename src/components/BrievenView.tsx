@@ -1,14 +1,6 @@
 import { useMemo, useState } from 'react';
 import { brieven, bronnen, correspondentById, correspondenten } from '../data/brieven/load';
-import {
-  filterBrieven,
-  filterCorrespondenten,
-  formatLetterDate,
-  hasQuote,
-  uniquePlaces,
-  uniqueTags,
-  uniqueYears,
-} from '../lib/brieven';
+import { filterBrieven, filterCorrespondenten, formatLetterDate, hasQuote, uniqueTags, uniqueYears } from '../lib/brieven';
 import { t, ui } from '../lib/i18n';
 import type { Locale } from '../types';
 
@@ -16,67 +8,72 @@ const INDEX_TABLE = 'https://www.mahler-online.at/letters_table.html';
 const INDEX_SEARCH = 'https://www.mahler-online.at/letters_search.html';
 
 export function BrievenView({ locale }: { locale: Locale }) {
-  const [who, setWho] = useState('');
-  const [tag, setTag] = useState('');
-  const [recipient, setRecipient] = useState('');
+  const [correspondentId, setCorrespondentId] = useState('');
   const [year, setYear] = useState('');
-  const [place, setPlace] = useState('');
+  const [tag, setTag] = useState('');
 
   const people = useMemo(
-    () => filterCorrespondenten(correspondenten, { text: who, tag }),
-    [who, tag],
+    () => filterCorrespondenten(correspondenten, { id: correspondentId, tag }),
+    [correspondentId, tag],
   );
   const letters = useMemo(
-    () => filterBrieven(brieven, { correspondentId: recipient, year, place }),
-    [recipient, year, place],
+    () => filterBrieven(brieven, { correspondentId, year, tag }, correspondenten),
+    [correspondentId, year, tag],
   );
 
   const years = uniqueYears(brieven);
-  const places = uniquePlaces(brieven);
   const tags = uniqueTags(correspondenten);
 
   return (
     <div className="list-view brieven-view">
       <h2>{ui.views.letters[locale]}</h2>
       <p className="meta">{t('lettersIntro', locale)}</p>
-      <p className="meta">
-        {t('lettersIndex', locale)}{' '}
-        <a href={INDEX_TABLE} target="_blank" rel="noreferrer">
-          mahler-online.at/letters_table.html
-        </a>
-        {' · '}
-        <a href={INDEX_SEARCH} target="_blank" rel="noreferrer">
-          letters_search.html
-        </a>
-      </p>
       <div className="warn">{t('lettersCopyright', locale)}</div>
+
+      <div className="brieven-filters">
+        <label>
+          <span className="kicker">{t('lettersFilterRecipient', locale)}</span>
+          <select
+            value={correspondentId}
+            onChange={(e) => setCorrespondentId(e.target.value)}
+            aria-label={t('lettersFilterRecipient', locale)}
+          >
+            <option value="">{t('lettersFilterAll', locale)}</option>
+            {correspondenten.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span className="kicker">{t('lettersFilterYear', locale)}</span>
+          <select value={year} onChange={(e) => setYear(e.target.value)} aria-label={t('lettersFilterYear', locale)}>
+            <option value="">{t('lettersFilterAll', locale)}</option>
+            {years.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span className="kicker">{t('lettersFilterTag', locale)}</span>
+          <select value={tag} onChange={(e) => setTag(e.target.value)} aria-label={t('lettersFilterTag', locale)}>
+            <option value="">{t('lettersFilterAll', locale)}</option>
+            {tags.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
 
       <section className="brieven-section" aria-labelledby="brieven-correspondenten">
         <h3 id="brieven-correspondenten">{t('lettersCorrespondents', locale)}</h3>
-        <div className="brieven-filters">
-          <label>
-            <span className="kicker">{t('lettersFilterSearch', locale)}</span>
-            <input
-              value={who}
-              onChange={(e) => setWho(e.target.value)}
-              placeholder={t('lettersFilterSearch', locale)}
-              aria-label={t('lettersFilterSearch', locale)}
-            />
-          </label>
-          <label>
-            <span className="kicker">{t('lettersFilterTag', locale)}</span>
-            <select value={tag} onChange={(e) => setTag(e.target.value)} aria-label={t('lettersFilterTag', locale)}>
-              <option value="">{t('lettersFilterAll', locale)}</option>
-              {tags.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
         {people.length === 0 ? (
-          <Empty locale={locale} />
+          <Empty locale={locale} people />
         ) : (
           people.map((c) => (
             <article key={c.id} className="card">
@@ -93,45 +90,6 @@ export function BrievenView({ locale }: { locale: Locale }) {
 
       <section className="brieven-section" aria-labelledby="brieven-sleutel">
         <h3 id="brieven-sleutel">{t('lettersKey', locale)}</h3>
-        <div className="brieven-filters">
-          <label>
-            <span className="kicker">{t('lettersFilterRecipient', locale)}</span>
-            <select
-              value={recipient}
-              onChange={(e) => setRecipient(e.target.value)}
-              aria-label={t('lettersFilterRecipient', locale)}
-            >
-              <option value="">{t('lettersFilterAll', locale)}</option>
-              {correspondenten.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            <span className="kicker">{t('lettersFilterYear', locale)}</span>
-            <select value={year} onChange={(e) => setYear(e.target.value)} aria-label={t('lettersFilterYear', locale)}>
-              <option value="">{t('lettersFilterAll', locale)}</option>
-              {years.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            <span className="kicker">{t('lettersFilterPlace', locale)}</span>
-            <select value={place} onChange={(e) => setPlace(e.target.value)} aria-label={t('lettersFilterPlace', locale)}>
-              <option value="">{t('lettersFilterAll', locale)}</option>
-              {places.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
         {letters.length === 0 ? (
           <Empty locale={locale} />
         ) : (
@@ -139,7 +97,7 @@ export function BrievenView({ locale }: { locale: Locale }) {
             const whoTo = correspondentById[letter.correspondentId];
             const source = bronnen.find((b) => b.id === letter.sourceId);
             return (
-              <article key={letter.id} className="card">
+              <article key={letter.id} className="card" id={letter.id}>
                 <div className="kicker">
                   {formatLetterDate(letter.date, locale)}
                   {letter.place ? ` · ${letter.place}` : ''}
@@ -168,26 +126,31 @@ export function BrievenView({ locale }: { locale: Locale }) {
 
       <section className="brieven-section" aria-labelledby="brieven-bronnen">
         <h3 id="brieven-bronnen">{t('lettersSources', locale)}</h3>
-        {bronnen.length === 0 ? (
-          <Empty locale={locale} />
-        ) : (
-          bronnen.map((b) => (
-            <article key={b.id} className="card">
-              <div className="kicker">{b.year ?? t('source', locale)}</div>
-              <h3>{b.labelNl}</h3>
-              <p className="meta">{b.noteNl}</p>
-            </article>
-          ))
-        )}
+        {bronnen.map((b) => (
+          <article key={b.id} className="card" id={b.id}>
+            {b.year != null ? <div className="kicker">{b.year}</div> : null}
+            <h3>{b.labelNl}</h3>
+            <p className="meta">{b.noteNl}</p>
+          </article>
+        ))}
       </section>
+
+      <footer className="brieven-footer">
+        <a href={INDEX_TABLE} target="_blank" rel="noreferrer">
+          mahler-online.at/letters_table.html
+        </a>
+        <a href={INDEX_SEARCH} target="_blank" rel="noreferrer">
+          mahler-online.at/letters_search.html
+        </a>
+      </footer>
     </div>
   );
 }
 
-function Empty({ locale }: { locale: Locale }) {
+function Empty({ locale, people }: { locale: Locale; people?: boolean }) {
   return (
     <p className="empty">
-      {t('lettersEmpty', locale)}{' '}
+      {t(people ? 'lettersEmptyPeople' : 'lettersEmpty', locale)}{' '}
       <a href={INDEX_TABLE} target="_blank" rel="noreferrer">
         mahler-online.at
       </a>
