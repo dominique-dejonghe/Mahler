@@ -96,11 +96,19 @@ export interface AtlasEvent {
   belgium?: boolean;
 }
 
+/** Direct listen/watch chip. Use a search URL and say so in `label` when the recording is not pinned. */
+export interface MediaLink {
+  url: string;
+  label: string;
+}
+
 export interface Work {
-  id: WorkId;
+  id: string;
   title: Localized;
   composed: string;
   unfinished?: boolean;
+  listen: MediaLink;
+  watch: MediaLink;
 }
 
 export interface TripStop {
