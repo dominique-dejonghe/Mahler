@@ -470,6 +470,26 @@ button { cursor: pointer; }
   text-align: left;
 }
 .never-card { border-color: var(--gold); }
+a.chip {
+  display: inline-block;
+  text-decoration: none;
+}
+a.chip:hover {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+}
+.catalog-card { margin-bottom: 8px; }
+.catalog-row {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(196, 163, 90, 0.15);
+}
+.catalog-row p { margin: 0 0 6px; }
+.catalog-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
 
 .brieven-section { margin: 22px 0 8px; }
 .brieven-section > h3 {

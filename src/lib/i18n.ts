@@ -116,6 +116,15 @@ export const ui = {
     cs: '71 úplných veřejných provedení jím; 4 fragmenty, nepočítají se.',
   },
   unfinished: { nl: 'Onvoltooid', en: 'Unfinished', de: 'Unvollendet', cs: 'Nedokončeno' },
+  catalog: { nl: 'Werken op jaartal', en: 'Works by year', de: 'Werke nach Jahr', cs: 'Díla podle roku' },
+  catalogIntro: {
+    nl: 'Alle symfonieën en cycli, gesorteerd op beginjaar. Directe luister- en kijklinks.',
+    en: 'All symphonies and cycles, sorted by first composition year. Direct listen and watch links.',
+    de: 'Alle Sinfonien und Zyklen, sortiert nach Beginnjahr. Direkte Hör- und Sehlinks.',
+    cs: 'Všechny symfonie a cykly podle roku začátku. Přímé odkazy k poslechu a sledování.',
+  },
+  listen: { nl: 'Beluisteren', en: 'Listen', de: 'Hören', cs: 'Poslouchat' },
+  watch: { nl: 'Bekijken', en: 'Watch', de: 'Ansehen', cs: 'Sledovat' },
   after1911: {
     nl: 'Na 1911 — eindige receptie, niet door hem.',
     en: 'After 1911 — finite reception, not by him.',

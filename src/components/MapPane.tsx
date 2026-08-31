@@ -3,6 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { MapContainer, Marker, Polygon, Polyline, TileLayer, useMap } from 'react-leaflet';
 import type { SeasonFilter } from '../App';
 import { coordsFor, eventPlace, placeById, trip2026 } from '../data';
+import { cartoDarkTileUrl } from '../lib/carto';
 import { t } from '../lib/i18n';
 import type { AtlasEvent, Locale } from '../types';
 
@@ -117,10 +118,7 @@ export function MapPane({
       </div>
       <div className="map-root">
         <MapContainer center={[49.2, 12.8]} zoom={4} minZoom={3} maxZoom={12} scrollWheelZoom>
-          <TileLayer
-            attribution='&copy; OSM &copy; CARTO'
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          />
+          <TileLayer attribution="&copy; OSM &copy; CARTO" url={cartoDarkTileUrl()} />
           {markers.map(({ event, lat, lng }) => {
             const place = eventPlace(event);
             return (

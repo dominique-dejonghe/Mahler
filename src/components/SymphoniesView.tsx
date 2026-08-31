@@ -8,9 +8,12 @@ import {
   venueOf,
   works,
 } from '../data';
+import { worksByYear } from '../data/works';
 import { formatDate } from '../lib/dates';
 import { t, ui } from '../lib/i18n';
 import type { AtlasEvent, Locale, WorkId } from '../types';
+
+const SELF_IDS = ['1', '2', '3', '4', '5', '6', '7', '8'] as const;
 
 export function SymphoniesView({
   locale,
@@ -28,6 +31,29 @@ export function SymphoniesView({
   return (
     <div className="list-view">
       <h2>{ui.views.symphonies[locale]}</h2>
+      <section className="card catalog-card" aria-label={t('catalog', locale)}>
+        <h3>{t('catalog', locale)}</h3>
+        <p className="meta">{t('catalogIntro', locale)}</p>
+        {worksByYear().map((w) => (
+          <div key={w.id} className="catalog-row">
+            <div className="kicker">
+              {w.composed}
+              {w.unfinished ? ` · ${t('unfinished', locale)}` : ''}
+            </div>
+            <p>
+              <strong>{w.title[locale]}</strong>
+            </p>
+            <div className="catalog-links">
+              <a className="chip" href={w.listen.url} target="_blank" rel="noopener noreferrer" aria-label={`${t('listen', locale)} · ${w.title[locale]}`}>
+                {w.listen.label}
+              </a>
+              <a className="chip" href={w.watch.url} target="_blank" rel="noopener noreferrer" aria-label={`${t('watch', locale)} · ${w.title[locale]}`}>
+                {w.watch.label}
+              </a>
+            </div>
+          </div>
+        ))}
+      </section>
       <div className="layers" style={{ position: 'static', margin: '8px 0 12px' }}>
         <button className={`chip${selfOnly ? ' on' : ''}`} type="button" onClick={() => onSelfOnly(!selfOnly)}>
           {t('selfOnPodium', locale)}
@@ -58,7 +84,7 @@ export function SymphoniesView({
       </div>
 
       {works
-        .filter((w) => w.id !== '9' && w.id !== 'lied' && w.id !== '10')
+        .filter((w) => (SELF_IDS as readonly string[]).includes(w.id))
         .map((w) => {
           const nights = selfNights.filter((n) => n.workId === w.id);
           const counts = selfStats.byWork[w.id as '1'];
@@ -129,7 +155,7 @@ export function SymphoniesView({
             );
           })}
           {works
-            .filter((w) => w.id !== '9' && w.id !== 'lied' && w.id !== '10')
+            .filter((w) => (SELF_IDS as readonly string[]).includes(w.id))
             .map((w) => {
               const rows = later.filter((p) => p.workId === w.id);
               if (!rows.length) return null;
