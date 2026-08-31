@@ -1,27 +1,28 @@
 {
-  "name": "mahler-reise",
-  "version": "0.1.0",
+  "name": "gustaaf",
   "private": true,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "dev:sandbox": "wrangler pages dev dist --ip 0.0.0.0 --port 3000",
-    "build": "vite build",
-    "preview": "wrangler pages dev dist --ip 0.0.0.0 --port 3000",
-    "deploy": "npm run build && wrangler pages deploy dist",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
-    "clean-port": "fuser -k 3000/tcp 2>/dev/null || true",
-    "test": "curl http://localhost:3000"
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "test": "vitest run"
   },
   "dependencies": {
-    "hono": "^4.6.5"
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250705.0",
-    "@hono/vite-cloudflare-pages": "^0.4.2",
-    "@hono/vite-dev-server": "^0.16.0",
+    "@types/leaflet": "^1.9.14",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.6.3",
     "vite": "^5.4.10",
-    "wrangler": "^3.84.0",
-    "typescript": "^5.6.3"
+    "vitest": "^2.1.8"
   }
 }

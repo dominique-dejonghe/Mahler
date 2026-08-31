@@ -1,0 +1,47 @@
+/* Mahler Reise — global styles (loaded after Tailwind CDN). */
+
+:root {
+  --primary: #2C5F4D;
+  --primary-700: #1A392E;
+  --accent: #B8860B;
+  --cream: #FAF7F0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Crimson Text', Georgia, serif;
+  background: var(--cream);
+  color: #091410;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-feature-settings: "lnum", "kern";
+}
+
+/* Container helper */
+.container { max-width: 1200px; }
+
+/* Selection */
+::selection { background: var(--accent); color: #fff; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #F2EBD9; }
+::-webkit-scrollbar-thumb { background: #ABCBBC; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* Line clamp helpers */
+.line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.line-clamp-3 { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+
+/* Subtle fade-in on page load */
+@keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
+main > section { animation: fadeIn .5s ease both; }
+
+/* Print */
+@media print {
+  header, footer, .no-print { display: none !important; }
+  body { background: #fff; color: #000; }
+}
