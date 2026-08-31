@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { composedStartYear, works, worksByYear } from './works';
+import { composedStartYear, works, worksByYear, workSearchQuery } from './works';
 
 const REQUIRED = [
   'klagende',
@@ -20,6 +20,14 @@ const REQUIRED = [
   '10',
 ];
 
+const STAR_PICKS =
+  /Bernstein|Boulez|Chailly|Karajan|Haitink|Jansons|Rattle|Hampson|Cooke/i;
+
+function searchQueryFrom(url: string, prefix: string): string {
+  expect(url.startsWith(prefix)).toBe(true);
+  return decodeURIComponent(url.slice(prefix.length));
+}
+
 describe('works catalog', () => {
   it('includes the required symphonies and cycles', () => {
     expect(works.map((w) => w.id)).toEqual(expect.arrayContaining(REQUIRED));
@@ -34,13 +42,21 @@ describe('works catalog', () => {
     expect(years).toEqual([...years].sort((a, b) => a - b));
   });
 
-  it('gives every work a listen and watch URL that is not a fabricated YouTube video id', () => {
+  it('gives every work a work-level search URL, not a pinned album or conductor', () => {
     for (const w of works) {
-      expect(w.listen.url).toMatch(/^https:\/\/open\.spotify\.com\/(album|search)\//);
-      expect(w.watch.url).toMatch(/^https:\/\/www\.youtube\.com\/results\?search_query=/);
-      expect(w.listen.label).toMatch(/^Spotify · /);
-      expect(w.watch.label).toMatch(/^YouTube · zoeken · /);
+      const query = workSearchQuery(w.title.en);
+      const spotify = searchQueryFrom(w.listen.url, 'https://open.spotify.com/search/');
+      const youtube = searchQueryFrom(w.watch.url, 'https://www.youtube.com/results?search_query=');
+      expect(spotify).toBe(query);
+      expect(youtube).toBe(query);
+      expect(query).toMatch(/^Mahler /);
+      expect(query).not.toMatch(STAR_PICKS);
+      expect(w.listen.url).not.toMatch(/\/album\//);
+      expect(w.watch.url).not.toMatch(/watch\?v=/);
     }
-    expect(works.find((w) => w.id === '10')?.listen.label).toMatch(/zoeken/);
+    expect(works.find((w) => w.id === 'klagende')?.listen.url).toContain(
+      encodeURIComponent('Mahler Das klagende Lied'),
+    );
+    expect(works.find((w) => w.id === '5')?.listen.url).toContain(encodeURIComponent('Mahler Symphony No. 5'));
   });
 });
