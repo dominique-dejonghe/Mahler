@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AffiliationsView } from './components/AffiliationsView';
+import { BrievenView } from './components/BrievenView';
 import { ChatDock } from './components/ChatDock';
 import { EventSheet } from './components/EventSheet';
 import { MahlerAvatar } from './components/MahlerAvatar';
@@ -11,16 +12,17 @@ import { allEvents } from './data';
 import { isoToSlider, sliderToIso } from './lib/dates';
 import { t } from './lib/i18n';
 import { eventsOnDate, locateOnDate, nearestAmong } from './lib/locate';
+import { pathFromView, viewFromPath, type View } from './lib/views';
 import type { AtlasEvent, Locale } from './types';
 
-export type View = 'atlas' | 'houses' | 'symphonies';
+export type { View };
 export type SeasonFilter = 'both' | 'winter' | 'summer';
 
 const START = isoToSlider('1908-09-19');
 
 export function App() {
   const [locale, setLocale] = useState<Locale>(() => readLocale());
-  const [view, setView] = useState<View>('atlas');
+  const [view, setView] = useState<View>(() => viewFromPath(window.location.pathname));
   const [yearFrac, setYearFrac] = useState(START);
   const [season, setSeason] = useState<SeasonFilter>('both');
   const [showTrip, setShowTrip] = useState(false);
@@ -51,6 +53,22 @@ export function App() {
   }, [chatOpen]);
 
   useEffect(() => {
+    function onPop() {
+      setView(viewFromPath(window.location.pathname));
+    }
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  function changeView(next: View) {
+    setView(next);
+    const path = pathFromView(next);
+    if (window.location.pathname !== path) {
+      history.pushState({ view: next }, '', path);
+    }
+  }
+
+  useEffect(() => {
     const onDate = eventsOnDate(iso, { deep }).filter((e) => visible.includes(e));
     if (onDate[0]) {
       setFocusEvent(onDate[0]);
@@ -70,7 +88,7 @@ export function App() {
 
   function jumpToEvent(event: AtlasEvent) {
     if (!event.selfConducted) setSelfOnly(false);
-    setView('atlas');
+    changeView('atlas');
     setYearFrac(isoToSlider(event.dateStart));
     setFocusId(event.id);
     setFocusEvent(event);
@@ -78,7 +96,7 @@ export function App() {
 
   return (
     <div className="app">
-      <Header locale={locale} onLocale={setLocale} view={view} onView={setView} />
+      <Header locale={locale} onLocale={setLocale} view={view} onView={changeView} />
       <div className={`stage${chatOpen ? ' chat-open' : ''}`}>
         {view === 'atlas' && (
           <MapPane
@@ -101,6 +119,7 @@ export function App() {
           />
         )}
         {view === 'houses' && <AffiliationsView locale={locale} onJump={jumpToEvent} />}
+        {view === 'letters' && <BrievenView locale={locale} />}
         {view === 'symphonies' && (
           <SymphoniesView locale={locale} onJump={jumpToEvent} selfOnly={selfOnly} onSelfOnly={setSelfOnly} />
         )}

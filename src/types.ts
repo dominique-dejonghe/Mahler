@@ -119,3 +119,35 @@ export interface QueryAnswer {
   unknown: boolean;
   inferred: boolean;
 }
+
+/** People Mahler wrote to. Copy is NL until later locales are filled. */
+export interface Correspondent {
+  id: string;
+  name: string;
+  periodFrom: string;
+  periodTo: string;
+  whyNl: string;
+  tags?: string[];
+}
+
+/** A letter from Mahler (never incoming). quote* omitted/null = do not render. */
+export interface Brief {
+  id: string;
+  date: string;
+  place: string;
+  correspondentId: string;
+  summaryNl: string;
+  whyNl: string;
+  sourceId: string;
+  quoteDE?: string | null;
+  quoteNL?: string | null;
+  mahlerOnlineUrl?: string | null;
+}
+
+/** Bibliographic edition note. No letter bodies. */
+export interface Bron {
+  id: string;
+  labelNl: string;
+  year?: number;
+  noteNl: string;
+}

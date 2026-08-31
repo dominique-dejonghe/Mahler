@@ -21,6 +21,62 @@ export const ui = {
     atlas: { nl: 'Atlas', en: 'Atlas', de: 'Atlas', cs: 'Atlas' },
     houses: { nl: 'Huizen', en: 'Houses', de: 'Häuser', cs: 'Domy' },
     symphonies: { nl: 'Symfonieën', en: 'Symphonies', de: 'Sinfonien', cs: 'Symfonie' },
+    letters: { nl: 'Brieven', en: 'Letters', de: 'Briefe', cs: 'Dopisy' },
+  },
+  lettersIntro: {
+    nl: 'Ongeveer vijfduizend brieven van en aan Gustav Mahler zijn bekend. Deze gids is geen editie en geen kopie van Blaukopf, Beaumont of andere uitgaven. We zetten geen volledige briefteksten. Mahler-Online indexeert drieduizend-plus records, meestal alleen metadata.',
+    en: 'Ongeveer vijfduizend brieven van en aan Gustav Mahler zijn bekend. Deze gids is geen editie en geen kopie van Blaukopf, Beaumont of andere uitgaven. We zetten geen volledige briefteksten. Mahler-Online indexeert drieduizend-plus records, meestal alleen metadata.',
+    de: 'Ongeveer vijfduizend brieven van en aan Gustav Mahler zijn bekend. Deze gids is geen editie en geen kopie van Blaukopf, Beaumont of andere uitgaven. We zetten geen volledige briefteksten. Mahler-Online indexeert drieduizend-plus records, meestal alleen metadata.',
+    cs: 'Ongeveer vijfduizend brieven van en aan Gustav Mahler zijn bekend. Deze gids is geen editie en geen kopie van Blaukopf, Beaumont of andere uitgaven. We zetten geen volledige briefteksten. Mahler-Online indexeert drieduizend-plus records, meestal alleen metadata.',
+  },
+  lettersIndex: {
+    nl: 'Wetenschappelijke index:',
+    en: 'Wetenschappelijke index:',
+    de: 'Wetenschappelijke index:',
+    cs: 'Wetenschappelijke index:',
+  },
+  lettersCopyright: {
+    nl: 'Mahlers eigen tekst is in de EU publiek domein (overleden 1911). Moderne edities, vertalingen en wetenschappelijk apparaat vallen onder auteursrecht. Deze gids dumpt geen volledige teksten.',
+    en: 'Mahlers eigen tekst is in de EU publiek domein (overleden 1911). Moderne edities, vertalingen en wetenschappelijk apparaat vallen onder auteursrecht. Deze gids dumpt geen volledige teksten.',
+    de: 'Mahlers eigen tekst is in de EU publiek domein (overleden 1911). Moderne edities, vertalingen en wetenschappelijk apparaat vallen onder auteursrecht. Deze gids dumpt geen volledige teksten.',
+    cs: 'Mahlers eigen tekst is in de EU publiek domein (overleden 1911). Moderne edities, vertalingen en wetenschappelijk apparaat vallen onder auteursrecht. Deze gids dumpt geen volledige teksten.',
+  },
+  lettersEmpty: {
+    nl: 'Nog geen brieven in de gids — index:',
+    en: 'Nog geen brieven in de gids — index:',
+    de: 'Nog geen brieven in de gids — index:',
+    cs: 'Nog geen brieven in de gids — index:',
+  },
+  lettersCorrespondents: {
+    nl: 'Correspondenten',
+    en: 'Correspondenten',
+    de: 'Correspondenten',
+    cs: 'Correspondenten',
+  },
+  lettersKey: {
+    nl: 'Sleutelbrieven van Mahler',
+    en: 'Sleutelbrieven van Mahler',
+    de: 'Sleutelbrieven van Mahler',
+    cs: 'Sleutelbrieven van Mahler',
+  },
+  lettersSources: { nl: 'Bronnen', en: 'Bronnen', de: 'Bronnen', cs: 'Bronnen' },
+  lettersFilterRecipient: {
+    nl: 'Ontvanger',
+    en: 'Ontvanger',
+    de: 'Ontvanger',
+    cs: 'Ontvanger',
+  },
+  lettersFilterYear: { nl: 'Jaar', en: 'Jaar', de: 'Jaar', cs: 'Jaar' },
+  lettersFilterPlace: { nl: 'Plaats', en: 'Plaats', de: 'Plaats', cs: 'Plaats' },
+  lettersFilterSearch: { nl: 'Zoek', en: 'Zoek', de: 'Zoek', cs: 'Zoek' },
+  lettersFilterTag: { nl: 'Tag', en: 'Tag', de: 'Tag', cs: 'Tag' },
+  lettersFilterAll: { nl: 'Alle', en: 'Alle', de: 'Alle', cs: 'Alle' },
+  lettersPeriod: { nl: 'Periode', en: 'Periode', de: 'Periode', cs: 'Periode' },
+  lettersMahlerOnline: {
+    nl: 'Mahler-Online',
+    en: 'Mahler-Online',
+    de: 'Mahler-Online',
+    cs: 'Mahler-Online',
   },
   winter: { nl: 'Opera-winter', en: 'Opera winter', de: 'Opernwinter', cs: 'Operní zima' },
   summer: { nl: 'Componeerzomer', en: 'Composing summer', de: 'Komponiersommer', cs: 'Skladebné léto' },
@@ -139,6 +195,6 @@ export const ui = {
 } as const;
 
 export function t<K extends keyof typeof ui>(key: K, locale: Locale): (typeof ui)[K] extends Record<Locale, infer V> ? V : never {
-  const node = ui[key] as Record<Locale, unknown>;
-  return node[locale] as never;
+  const node = ui[key] as Record<string, unknown>;
+  return (node[locale] ?? node.nl) as never;
 }

@@ -471,6 +471,49 @@ button { cursor: pointer; }
 }
 .never-card { border-color: var(--gold); }
 
+.brieven-section { margin: 22px 0 8px; }
+.brieven-section > h3 {
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+  color: var(--gold-bright);
+}
+.brieven-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 8px 0 12px;
+}
+.brieven-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: min(100%, 160px);
+}
+.brieven-filters input,
+.brieven-filters select {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 6px 8px;
+  border-radius: 0;
+  min-height: 36px;
+}
+.brieven-filters option { color: var(--ink); background: var(--paper); }
+.brieven-view .quote {
+  margin: 8px 0;
+  padding: 4px 0 4px 12px;
+  border-left: 2px solid var(--gold);
+  font-style: italic;
+  color: var(--paper-dim);
+}
+.brieven-view .empty {
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  color: var(--paper-dim);
+  font-size: 0.92rem;
+}
+.brieven-view a { color: var(--gold); }
+
 @media (max-width: 520px) {
   .self-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

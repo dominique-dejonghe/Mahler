@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gustaaf.local/brieven.schema.json",
+  "title": "Gustaaf Brieven data",
+  "description": "Drop-in JSON for the Brieven gids. Empty arrays are valid. Do not invent letters, quotes, or correspondent bios.",
+  "$defs": {
+    "kebabId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 1
+    },
+    "quote": {
+      "description": "Optional verified excerpt. Omit, null, or empty = do not render a quote. Never invent.",
+      "type": ["string", "null"]
+    },
+    "correspondent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "periodFrom", "periodTo", "whyNl"],
+      "properties": {
+        "id": { "$ref": "#/$defs/kebabId" },
+        "name": { "type": "string", "minLength": 1 },
+        "periodFrom": { "type": "string", "minLength": 1 },
+        "periodTo": { "type": "string", "minLength": 1 },
+        "whyNl": { "type": "string", "minLength": 1 },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "brief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "date", "place", "correspondentId", "summaryNl", "whyNl", "sourceId"],
+      "properties": {
+        "id": { "$ref": "#/$defs/kebabId" },
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}(-\\d{2}(-\\d{2})?)?$",
+          "description": "YYYY, YYYY-MM, or YYYY-MM-DD. Letter from Mahler only."
+        },
+        "place": { "type": "string", "minLength": 1 },
+        "correspondentId": { "$ref": "#/$defs/kebabId" },
+        "summaryNl": { "type": "string", "minLength": 1 },
+        "whyNl": { "type": "string", "minLength": 1 },
+        "sourceId": { "$ref": "#/$defs/kebabId" },
+        "quoteDE": { "$ref": "#/$defs/quote" },
+        "quoteNL": { "$ref": "#/$defs/quote" },
+        "mahlerOnlineUrl": { "type": ["string", "null"], "format": "uri" }
+      }
+    },
+    "bron": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "labelNl", "noteNl"],
+      "properties": {
+        "id": { "$ref": "#/$defs/kebabId" },
+        "labelNl": { "type": "string", "minLength": 1 },
+        "year": { "type": "integer" },
+        "noteNl": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "correspondenten": { "type": "array", "items": { "$ref": "#/$defs/correspondent" } },
+    "brieven": { "type": "array", "items": { "$ref": "#/$defs/brief" } },
+    "bronnen": { "type": "array", "items": { "$ref": "#/$defs/bron" } }
+  }
+}
