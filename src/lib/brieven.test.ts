@@ -173,6 +173,17 @@ describe('validator', () => {
   });
 });
 
+describe('PDF download control', () => {
+  it('points at the exact public PDF path and label', async () => {
+    const src = await import('node:fs/promises').then((fs) =>
+      fs.readFile(new URL('../components/BrievenView.tsx', import.meta.url), 'utf8'),
+    );
+    expect(src).toContain('PDF — 28 sleutelbrieven');
+    expect(src).toContain('href="/static/Mahler-28-sleutelbrieven.pdf"');
+    expect(src).toContain('download="Mahler-28-sleutelbrieven.pdf"');
+  });
+});
+
 describe('/brieven path', () => {
   it('maps /brieven to the letters view and back', () => {
     expect(viewFromPath('/brieven')).toBe('letters');

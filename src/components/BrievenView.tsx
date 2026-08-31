@@ -29,6 +29,13 @@ export function BrievenView({ locale }: { locale: Locale }) {
       <h2>{ui.views.letters[locale]}</h2>
       <p className="meta">{t('lettersIntro', locale)}</p>
       <div className="warn">{t('lettersCopyright', locale)}</div>
+      <a
+        className="chip on brieven-download"
+        href="/static/Mahler-28-sleutelbrieven.pdf"
+        download="Mahler-28-sleutelbrieven.pdf"
+      >
+        PDF — 28 sleutelbrieven
+      </a>
 
       <div className="brieven-filters">
         <label>
